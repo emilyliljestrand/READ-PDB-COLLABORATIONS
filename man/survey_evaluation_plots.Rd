@@ -61,20 +61,20 @@ survey_evaluation_plots(
 \item{strata.color.set}{Character vector. A recycled vector of hex colors used to uniquely identify individual strata in plots.}
 }
 \value{
-The function does not explicitly return an object in the R environment. Instead, it writes 
+The function does not explicitly return an object in the R environment. Instead, it writes
 diagnostic data tables (`.csv`) and visual trend plots (`.png` or specified format) directly to the target `od` path.
 }
 \description{
 This function processes bottom trawl survey (BTS) data to calculate stratum-specific
-means, proportions of stock area sampled, and total tow counts. It generates a comprehensive 
+means, proportions of stock area sampled, and total tow counts. It generates a comprehensive
 suite of diagnostic plots (as PNGs or other formats) and CSV summaries to evaluate
 survey design metrics across seasons (SPRING and FALL) and years.
 Code developed by Liz Brooks (May 2026; upload to repo August 2026)
 Contributions by Chris Legault (August 2026 (facet_wrap_paginate! and helpful checking for tripping hazards))
 }
 \details{
-The function filters input data for `PURPOSE_CODE == 10` and limits seasons strictly to `"SPRING"` and `"FALL"`. 
+The function filters input data for `PURPOSE_CODE == 10` and limits seasons strictly to `"SPRING"` and `"FALL"`.
 It automatically checks for the target output directory and creates it recursively if it does not exist.
-If sampling is determined to be incomplete in a given year-season layer (sampled area < 100%), it generates 
+If sampling is determined to be incomplete in a given year-season layer (sampled area < 100%), it generates
 an extra tracking plot mapping the divergence between the total area mean and the sampled area mean.
 }

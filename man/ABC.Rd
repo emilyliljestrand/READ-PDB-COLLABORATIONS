@@ -2,25 +2,25 @@
 % Please edit documentation in R/abccalc.R
 \name{ABC}
 \alias{ABC}
-\title{Function to calculate the ABC using a lognormal distribution}
+\title{Calculate ABC using a lognormal distribution}
 \usage{
 ABC(OFL, relB, CV)
 }
 \arguments{
-\item{OFL}{OFL for the stock}
+\item{OFL}{Numeric. Overfishing limit for the stock, in catch units (e.g., metric tons). Used as the lognormal median.}
 
-\item{relB}{B/Bmsy}
+\item{relB}{Numeric. Biomass relative to target, B/Bmsy (unitless). Passed to `calc_pstar()`.}
 
-\item{CV}{Coefficient of variation for OFL}
+\item{CV}{Numeric. Coefficient of variation of the OFL (unitless, e.g., 0.6).}
 }
 \value{
-ABC - allowable biological catch
+Numeric. ABC (allowable biological catch), in the same units as `OFL`.
 }
 \description{
-Calculates ABC using inputs of the OFL, biomass relative to target and assumed CV for OFL
+Calculates acceptable biological catch (ABC) from the overfishing limit (OFL), biomass relative to target (B/Bmsy), and the assumed CV of the OFL. The P* value is obtained from `calc_pstar()` and used as a quantile of a lognormal distribution centred on the OFL.
 }
 \examples{
-catch <- ABC(12345,1.11,0.6)
+catch <- ABC(12345, 1.11, 0.6)
 }
 \author{
 E Liljestrand, expanded code from M. Wilberg, originally 7-26-2011, updated with new MAFMC P* policy 5-10-2022

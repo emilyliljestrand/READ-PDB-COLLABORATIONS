@@ -2,18 +2,20 @@
 % Please edit documentation in R/do_selftest.R
 \name{do_selftest}
 \alias{do_selftest}
-\title{do_selftest}
+\title{Simulation self-test of a WHAM model}
 \usage{
 do_selftest(mod, n_sim)
 }
 \arguments{
-\item{mod}{wham model created with `fit_wham()`}
+\item{mod}{A WHAM model object created with `fit_wham()`.}
 
-\item{n_sim}{number of simulations to perform}
+\item{n_sim}{Integer. Number of simulations to perform.}
 }
 \value{
-data.frame of annual true and estimated F, R, and SSB
+A data frame of annual true (`TRU`) and estimated (`EST`) F, R, and SSB, one row per simulation, year, and variable (`VAR`), with a `converged` flag per simulation.
 }
 \description{
-Perform simulation self-test of a WHAM model.
+Performs a simulation self-test of a WHAM model: data are simulated from the
+fitted model, refit, and the true and estimated F, recruitment (R), and SSB
+are compared for each simulation.
 }

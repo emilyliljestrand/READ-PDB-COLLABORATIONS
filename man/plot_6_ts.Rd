@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{plot_6_ts}
 \alias{plot_6_ts}
-\title{plot_6_ts}
+\title{Plot six time series from StockEff survey data}
 \usage{
 plot_6_ts(data, mytitle)
 }

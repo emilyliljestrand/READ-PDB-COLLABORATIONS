@@ -2,7 +2,7 @@
 % Please edit documentation in R/P-star.basic.model.R
 \name{pstarmodel}
 \alias{pstarmodel}
-\title{Conduct the P* projections for the MAFMC}
+\title{Conduct the P* projections for the MAFMC (model output)}
 \usage{
 pstarmodel(
   mod = NULL,
@@ -14,31 +14,37 @@ pstarmodel(
 )
 }
 \arguments{
-\item{mod}{An rds from a WHAM fit}
+\item{mod}{A WHAM fitted model object (rds from a WHAM fit) with `years` and projection-capable structure.}
 
-\item{SSBmsy}{the SSBmsy proxy used to calculate ratio between biomass and reference point}
+\item{SSBmsy}{The SSBmsy proxy used to calculate the ratio between biomass and the reference point.}
 
-\item{catch.year1}{the amount of catch in the assessment year (usually the ABC)}
+\item{catch.year1}{The amount of catch in the assessment year (usually the ABC).}
 
-\item{CV}{the level of uncertainty}
+\item{projyr}{Number of years to project into the future (integer, default = 3).}
 
-\item{avg.abc}{average ABC, if using, specify, otherwise don't specify}
+\item{CV}{Coefficient of variation of the OFL, as a proportion (e.g., 0.6), default = 1.5.}
 
-\item{proj.yr}{how many years to project into the future}
+\item{avg.abc}{Optional average ABC. If supplied, it replaces the calculated catch for the
+intermediate projection years; leave NULL (default) otherwise.}
 }
 \value{
-a model object with the years of projected values based on P* catch advice
+A WHAM projection model object (from `project_wham()`) with projected values for the
+  years following the model, based on P* catch advice.
 }
 \description{
-Conducts the P* projections, which incorporates uncertainty and risk in ABC calculation from OFL using a fitted WHAM model
+Conducts the P* projections, which incorporate uncertainty and risk in the ABC calculation
+from the OFL using a fitted WHAM model. Projects the stock forward, iteratively computing
+the ABC for each projection year, and returns the final projection model.
 }
 \examples{
+\dontrun{
 mod <- readRDS("Modeling/Run3/fit.RDS")
-SSBmsy <- 11225        
+SSBmsy <- 11225
 catch.year1 <- 7557
 CV <- 0.6
 projyr <- 2
-pstar_model <- pstar(mod,SSBmsy,catch.year1,projyr,CV)
+pstar_model <- pstarmodel(mod, SSBmsy, catch.year1, projyr, CV)
+}
 }
 \author{
 E Liljestrand 7-19-2024, expanded code provided by C Adams for butterfish 7-5-2022

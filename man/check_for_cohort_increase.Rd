@@ -7,17 +7,19 @@
 check_for_cohort_increase(mod)
 }
 \arguments{
-\item{mod}{A model result from WHAM, can be either single WHAM or multi WHAM.}
+\item{mod}{A model result from WHAM, can be either single WHAM or multi WHAM. Must contain `rep$NAA` and `years_full`.}
 }
 \value{
-A ggplot showing the relative percent change for each cohort (including the plus group) with the number denoting the age and year of the surviving fish. Values above zero (the red dashed line) indicate the cohort has increased. Values above 100 may be cause for concern.
+A ggplot showing the relative percent change for each cohort (including the plus group), with the number denoting the age and year of the surviving fish. Values above zero (the red dashed line) indicate the cohort has increased. Values above 100 may be cause for concern. The plot is also printed.
 }
 \description{
 Random effects can allow a cohort to increase from one year and age to the next year and age. This function makes a plot to quickly identify when this happens.
 }
 \examples{
+\dontrun{
 mod <- readRDS("m38.RDS")
 p <- check_for_cohort_increase(mod)
 ggsave(filename = "my_cohort_check.png", p)
-Note: for those who do not like ggplot, matplot(naa_percent_rel_diff) can be used instead
+}
+# Note: for those who do not like ggplot, matplot(naa_percent_rel_diff) can be used instead
 }

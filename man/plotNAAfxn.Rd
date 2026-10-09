@@ -2,22 +2,25 @@
 % Please edit documentation in R/plotNAAfxn.R
 \name{plotNAAfxn}
 \alias{plotNAAfxn}
-\title{Plot NAA devs from WHAM fit}
+\title{Plot NAA deviations from WHAM fit}
 \usage{
 plotNAAfxn(mods = NULL, cor = NULL)
 }
 \arguments{
-\item{mods}{An rds from a WHAM fit with NAA random effects}
+\item{mods}{A WHAM fitted model object (rds from a WHAM fit) with NAA random effects. Must include `rep$NAA_devs`, `input$years_full`, `input$data$n_ages`, and `model_name`.}
 
-\item{cor}{NULL - a placeholder for future labeling}
+\item{cor}{NULL - a placeholder for future labeling (stored in the plot data as `NAA_cor`, not displayed).}
 }
 \value{
-A ggplot. Must use ggsave after running the function to save the plot
+A ggplot. Must use ggsave after running the function to save the plot.
 }
 \description{
-Plot NAA devs from WHAM fit
+Plots numbers-at-age (NAA) random effect deviations from a WHAM fit as a heat map of
+deviation by year and age.
 }
 \examples{
-naaplot=plotNAAfxn(mods=mod,cor="NA")
-ggsave(paste("YOURNAME","_NAAdevs.jpeg"),naaplot,path=YOURPATH)
+\dontrun{
+naaplot <- plotNAAfxn(mods = mod, cor = "NA")
+ggsave(paste("YOURNAME", "_NAAdevs.jpeg"), naaplot, path = YOURPATH)
+}
 }

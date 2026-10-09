@@ -2,24 +2,32 @@
 % Please edit documentation in R/drop_term_index_retro.R
 \name{drop_term_index_retro}
 \alias{drop_term_index_retro}
-\title{missing terminal year indices}
+\title{Drop terminal-year indices in retrospective peels}
 \usage{
 drop_term_index_retro(model = NULL, drop = NULL)
 }
 \arguments{
 \item{model}{A WHAM rds output file from a run that included NAA random effects and a retrospective. The rds cannot include projections.}
 
-\item{drop}{A list with two elements (indices and index_paa) that gives the numeric value indicating which indices and age comps to drop from the terminal years}
+\item{drop}{A list with two elements (`indices` and `index_paa`) giving the numeric index values
+of the indices and age compositions to drop from the terminal years.}
 }
 \value{
-A list containing the results of each fit. Also saves a png plot of NAA devs from each fit and the SSB retro where the selected index data are missing from each terminal year. Saved to the working directory
+A list containing the results of each peel fit (one WHAM fit per peel). Also saves
+  a png plot of NAA devs from each fit (`Peel_<r>_lostTermI_NAAdevs.jpeg`) and the SSB retro
+  plot (`SSB_retro_relative_lostTermI.png`) to the working directory.
 }
 \description{
-drops some or all of the indices from the terminal year of each peel of retrospective to see how the NAA devs and retro change. Reliant on the fit_hindcast and plotNAAfxn.
+Refits each retrospective peel of a WHAM model with the selected indices and index
+age-composition data removed from the terminal year, then compares the resulting
+NAA deviations and SSB retrospective patterns against the base model. Saves a
+NAA deviation plot per peel and an SSB retrospective plot to the working directory.
 }
 \examples{
-#drops all indices from a fit
-droptermIndex=drop_term_index_retro(model=mod,drop=list(indices=1:mod$input$data$n_indices,index_paa=1:mod$input$data$n_indices)) 
-drop whatever index 2 is from a fit
-droptermIndex=drop_term_index_retro(model=mod,drop=list(indices=2,index_paa=2)) 
+\dontrun{
+# drops all indices from a fit
+droptermIndex <- drop_term_index_retro(model = mod, drop = list(indices = 1:mod$input$data$n_indices, index_paa = 1:mod$input$data$n_indices))
+# drop whatever index 2 is from a fit
+droptermIndex <- drop_term_index_retro(model = mod, drop = list(indices = 2, index_paa = 2))
+}
 }

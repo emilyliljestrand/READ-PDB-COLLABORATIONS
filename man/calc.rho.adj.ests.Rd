@@ -2,23 +2,23 @@
 % Please edit documentation in R/calc.rho.adj.ests.R
 \name{calc.rho.adj.ests}
 \alias{calc.rho.adj.ests}
-\title{calc.rho.adj.ests}
+\title{Calculate rho-adjusted time series}
 \usage{
 calc.rho.adj.ests(series = NULL, rho = NULL)
 }
 \arguments{
-\item{series}{A data frame containing the following columns:
+\item{series}{A data frame containing the following columns (as produced by \code{calc.uncertainty()}):
 \itemize{
-\item est -  Estimated time series
+\item est - Estimated time series
 \item lo_90 - Lower 90\% CI for estimates
 \item hi_90 - Upper 90\% CI for estimates
 }}
 
-\item{rho}{Mohn's rho value associated with the time series.}
+\item{rho}{Numeric. Mohn's rho value associated with the time series (unitless).}
 }
 \value{
-A data table containing original and rho-adjusted time series with accompanying 90\% CI.
+A data frame containing the original columns plus \code{est.adj}, \code{lo_90.adj}, and \code{hi_90.adj} (rho-adjusted estimate and 90\% CI).
 }
 \description{
-Calculate rho-adjusted time series based on 90\% CI
+Applies a Mohn's rho adjustment to a time series and its 90\% confidence bounds. Each value is divided by \eqn{1 + \rho}.
 }

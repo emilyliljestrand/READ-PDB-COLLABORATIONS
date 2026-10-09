@@ -7,20 +7,20 @@
 inv_ABC(ABC, OFL, CV)
 }
 \arguments{
-\item{OFL}{OFL for the stock}
+\item{ABC}{Numeric. Allowable biological catch, in the same units as `OFL`.}
 
-\item{CV}{Coefficient of variation for OFL}
+\item{OFL}{Numeric. Overfishing limit for the stock, used as the lognormal median.}
 
-\item{relB}{ABC - allowable biological catch}
+\item{CV}{Numeric. Coefficient of variation of the OFL (unitless, e.g., 1.0).}
 }
 \value{
-P* value
+Numeric. P* value (probability between 0 and 1) implied by `ABC`.
 }
 \description{
-takes as inputs the OFL, biomass relative to its target, and the assumed CV for the OFL
+Calculates the P* value implied by an ABC, given the OFL and the assumed CV of the OFL. This is the inverse of `ABC()` with respect to P*.
 }
 \examples{
-inv_ABC <- inv_ABC(11456,13234,1.0)
+pstar <- inv_ABC(11456, 13234, 1.0)
 }
 \author{
 E Liljestrand, expanded code from M. Wilberg, originally 7-26-2011, updated with new MAFMC P* policy 5-10-2022

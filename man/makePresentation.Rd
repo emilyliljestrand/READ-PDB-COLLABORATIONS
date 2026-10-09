@@ -2,7 +2,7 @@
 % Please edit documentation in R/makePresentation.R
 \name{makePresentation}
 \alias{makePresentation}
-\title{makePresentation}
+\title{Create a PowerPoint presentation of figures}
 \usage{
 makePresentation(
   plotStorage = NULL,
@@ -24,8 +24,11 @@ makePresentation(
 
 \item{outdir}{A file path for the directory where the final presentation file should be saved, no default.}
 
-\item{filename}{A string for the final presentation file name, no default.}
+\item{filename}{A string for the final presentation file name (without extension), no default. The .qmd extension is added automatically.}
+}
+\value{
+Called for its side effects: writes a `.qmd` file to `outdir` and renders it with Quarto.
 }
 \description{
-Generic R code to pull all figures from a folder into a powerpoint. By default this code generates a PowerPoint presentation including all .png files in the specified plotStorage directory. Slides are labeled numerically
+Generic R code to pull all figures from a folder into a PowerPoint. By default this code generates a PowerPoint presentation including all .png files in the specified plotStorage directory. Slides are labeled numerically. The presentation is written as a Quarto (.qmd) file and rendered with Quarto.
 }

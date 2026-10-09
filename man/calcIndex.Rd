@@ -18,66 +18,66 @@ calcIndex(
 \arguments{
 \item{IndexType}{A string specifying the type of index calculation to perform, options include:
 \itemize{
-  \item{"Default" - Function runs SQL queries to stockEff oracle backend to calculate abundance and biomass indices as done in stockEff, requires a network connection and login credentials}
-  \item{"Custom" - Function calculates abundance and biomass indices using the provided surveyTowData matrix}
+  \item "Default" - Function runs SQL queries to stockEff oracle backend to calculate abundance and biomass indices as done in stockEff, requires a network connection and login credentials
+  \item "Custom" - Function calculates abundance and biomass indices using the provided surveyTowData matrix
 }}
 
 \item{doLogin}{Only required if IndexType == "Default". A boolean, if TRUE then function will ask for oracle login credentials to set up a "connection" login object, if FALSE then function assumes oracle connection has already been made and code will use existing global "connection" object to run. Default = FALSE.}
 
 \item{surveyTowData}{Only required if IndexType == "Custom". A matrix of custom survey tows with the following columns that match those in the STOCKEFF.I_SV_MERGED_CATCH_CALIB_O oracle product, unless otherwise specified
 \itemize{
-  \item{COMMON_NAME}
-  \item{SPECIES_ITIS}
-  \item{SVSPP}
-  \item{STOCK_ABBREV}
-  \item{STOCK_NAME}
-  \item{PURPOSE_CODE}
-  \item{YEAR}
-  \item{SEASON}
-  \item{CRUISE6}
-  \item{STRATUM}
-  \item{TOW}
-  \item{STATION}
-  \item{SEX}
-  \item{SEX_TYPE}
-  \item{CATCH_WT_CAL = One of the following weight calibrations: CATCH_WT_V_CAL, CATCH_WT_D_CAL, CATCH_WT_G_CAL, CATCH_WT_B_CAL available in STOCKEFF.I_SV_MERGED_CATCH_CALIB_O}
-  \item{CATCH_NO_CAL = One of the following number calibrations: CATCH_NO_V_CAL, CATCH_NO_D_CAL, CATCH_NO_G_CAL, CATCH_NO_B_CAL available in STOCKEFF.I_SV_MERGED_CATCH_CALIB_O}
-  \item{STRATUM_AREA = Area of each survey strata, available in STOCKEFF.E_SV_STRATA_C}
+  \item COMMON_NAME
+  \item SPECIES_ITIS
+  \item SVSPP
+  \item STOCK_ABBREV
+  \item STOCK_NAME
+  \item PURPOSE_CODE
+  \item YEAR
+  \item SEASON
+  \item CRUISE6
+  \item STRATUM
+  \item TOW
+  \item STATION
+  \item SEX
+  \item SEX_TYPE
+  \item CATCH_WT_CAL = One of the following weight calibrations: CATCH_WT_V_CAL, CATCH_WT_D_CAL, CATCH_WT_G_CAL, CATCH_WT_B_CAL available in STOCKEFF.I_SV_MERGED_CATCH_CALIB_O
+  \item CATCH_NO_CAL = One of the following number calibrations: CATCH_NO_V_CAL, CATCH_NO_D_CAL, CATCH_NO_G_CAL, CATCH_NO_B_CAL available in STOCKEFF.I_SV_MERGED_CATCH_CALIB_O
+  \item STRATUM_AREA = Area of each survey strata, available in STOCKEFF.E_SV_STRATA_C
 }}
 
 \item{calibration}{A string specifying the type of calibrations to apply, not all stocks will apply all calibrations but stockEff applies those specified cumulatively in order: vessel, door, gear, bigelow (all applied in B_CAL option). Default = "B_CAL" (i.e. all calibrations specified in stockEff will be applied, if Bigelow calibrations are not applied then "G_CAL" and "B_CAL" columns will contain the same information)
 \itemize{
-  \item{None - no calibrations, requires CATCH_WT and CATCH_NO columns in tow data}
-  \item{V_CAL - vessel calibrations, requires CATCH_WT_V_CAL and CATCH_NO_V_CAL columns in tow data}
-  \item{D_CAL - door + vessel calibrations, requires CATCH_WT_D_CAL and CATCH_NO_D_CAL columns in tow data}
-  \item{G_CAL - gear + door + vessel calibrations, requires CATCH_WT_G_CAL and CATCH_NO_G_CAL columns in tow data}
-  \item{B_CAL - bigelow + all calibrations, requires CATCH_WT_B_CAL and CATCH_NO_B_CAL columns in tow data}
+  \item None - no calibrations, requires CATCH_WT and CATCH_NO columns in tow data
+  \item V_CAL - vessel calibrations, requires CATCH_WT_V_CAL and CATCH_NO_V_CAL columns in tow data
+  \item D_CAL - door + vessel calibrations, requires CATCH_WT_D_CAL and CATCH_NO_D_CAL columns in tow data
+  \item G_CAL - gear + door + vessel calibrations, requires CATCH_WT_G_CAL and CATCH_NO_G_CAL columns in tow data
+  \item B_CAL - bigelow + all calibrations, requires CATCH_WT_B_CAL and CATCH_NO_B_CAL columns in tow data
 }}
 
 \item{summary_strata}{A vector of strata for which strata-specific mean weight and numbers (by year, season, survey) should be returned in the strata_means_summary object, default returns means for all strata.}
 
 \item{swept_area}{DRAFT ONLY: Option only available for IndexType == "Default". A list containing the following to calculate a swept_area biomass index, if NULL then relative index of abundance calculated as in stockEff. Default = NULL.
 \itemize{
-  \item{catchability -  A number for catchability applied to all ages/lengths when calculating an index}
-  \item{length_condition - A string containing a conditional statement to select the LENGTH used in index calculations (e.g. "LENGTH >=30" includes fish greater or equal to 30cm in index), must include a reference to "LENGTH" variable}
+  \item catchability -  A number for catchability applied to all ages/lengths when calculating an index
+  \item length_condition - A string containing a conditional statement to select the LENGTH used in index calculations (e.g. "LENGTH >=30" includes fish greater or equal to 30cm in index), must include a reference to "LENGTH" variable
 }}
 }
 \value{
-A list containing: 
+A list containing:
 \itemize{
-  \item{indices - A matrix containing stratified mean indices by weight (WT) and numbers (NO), by year, season, and survey}
-  \item{strata_means_summary - A matrix of strata means used in index calculations by weight (CATCH_WT) and numbers (CATCH_NO) for each year, season, and survey. Strata included in summary are specified using summary_strata argument}
+  \item indices - A matrix containing stratified mean indices by weight (WT) and numbers (NO), by year, season, and survey
+  \item strata_means_summary - A matrix of strata means used in index calculations by weight (CATCH_WT) and numbers (CATCH_NO) for each year, season, and survey. Strata included in summary are specified using summary_strata argument
 }
 If IndexType == "Default" also include the following in the returned list:
 \itemize{
-  \item{indices - A matrix containing stratified mean indices calculated by weight (WT) and numbers (NO) for specified species, year and season, returned for all IndexTypes}
-  \item{all_tows - A matrix of all tows used in the default calculation which can be subset to populate a custom surveyTowData input}
-  \item{pass_strata_check - A boolean, if TRUE strata-specific CATCH_WT and CATCH_NO calculations match stockEff backend V_SV_STRAT_SUMMARY_O product exactly, if false look at check_strata and strata_diff returns}
-  \item{check_strata - If pass_strata_check == FALSE, returns a table of strata/year/season combinations with different CATCH_WT or CATCH_NO compared to stockEff backend V_SV_STRAT_SUMMARY_O product, if pass_strata_check == TRUE returns NA}
-  \item{strata_diff - If pass_strata_check == FALSE, summarizes spread of differences between CATCH_WT or CATCH_NO calculations compared to stockEff backend V_SV_STRAT_SUMMARY_O product (if small, differences are due to rounding errors), if pass_strata_check == TRUE returns NA}
-  \item{pass_index_check - A boolean, if TRUE STRAT_MEAN_WT and STRAT_MEAN_NO indices and their associated variance, standard error, and CVs match stockEff backend V_SV_STRAT_IND_O product exactly, if false look at check_index and index_diff returns}
-  \item{check_index - If pass_index_check == FALSE, returns a table of index/year/season combinations with different STRAT_MEAN, VAR, STDERROR, or CV calculations for WT or NO compared to stockEff backend V_SV_STRAT_IND_O product, if pass_index == TRUE returns NA}
-  \item{index_diff - If pass_index_check == FALSE, summarizes spread of differences between STRAT_MEAN, VAR, STDERROR, and CV calculation for WT and NO indices compared to stockEff backend V_STRAT_IND_O product (if small, differences are due to rounding errors), if pass_index_check == TRUE returns NA}
+  \item indices - A matrix containing stratified mean indices calculated by weight (WT) and numbers (NO) for specified species, year and season, returned for all IndexTypes
+  \item all_tows - A matrix of all tows used in the default calculation which can be subset to populate a custom surveyTowData input
+  \item pass_strata_check - A boolean, if TRUE strata-specific CATCH_WT and CATCH_NO calculations match stockEff backend V_SV_STRAT_SUMMARY_O product exactly, if false look at check_strata and strata_diff returns
+  \item check_strata - If pass_strata_check == FALSE, returns a table of strata/year/season combinations with different CATCH_WT or CATCH_NO compared to stockEff backend V_SV_STRAT_SUMMARY_O product, if pass_strata_check == TRUE returns NA
+  \item strata_diff - If pass_strata_check == FALSE, summarizes spread of differences between CATCH_WT or CATCH_NO calculations compared to stockEff backend V_SV_STRAT_SUMMARY_O product (if small, differences are due to rounding errors), if pass_strata_check == TRUE returns NA
+  \item pass_index_check - A boolean, if TRUE STRAT_MEAN_WT and STRAT_MEAN_NO indices and their associated variance, standard error, and CVs match stockEff backend V_SV_STRAT_IND_O product exactly, if false look at check_index and index_diff returns
+  \item check_index - If pass_index_check == FALSE, returns a table of index/year/season combinations with different STRAT_MEAN, VAR, STDERROR, or CV calculations for WT or NO compared to stockEff backend V_SV_STRAT_IND_O product, if pass_index == TRUE returns NA
+  \item index_diff - If pass_index_check == FALSE, summarizes spread of differences between STRAT_MEAN, VAR, STDERROR, and CV calculation for WT and NO indices compared to stockEff backend V_STRAT_IND_O product (if small, differences are due to rounding errors), if pass_index_check == TRUE returns NA
 }
 
 NOTES:
@@ -89,26 +89,36 @@ NOTES:
 Use calibrated survey data to replicate stockEff survey index calculations. Both biomass and abundance indices will be calculated. Only those calibrations already applied by stockEff can be used.
 }
 \examples{
-cod <- calcIndex(species_itis = 164712,
-                            stock_abbrev = "GBK",
-                            IndexType = "Default",
-                            doLogin = FALSE,
-                            calibration = "B_CAL")
-                            swept_area = list(catchability = 1,
-                            length_condition = "LENGTH >= 30")
+cod <- calcIndex(
+  species_itis = 164712,
+  stock_abbrev = "GBK",
+  IndexType = "Default",
+  doLogin = FALSE,
+  calibration = "B_CAL"
+)
+swept_area <- list(
+  catchability = 1,
+  length_condition = "LENGTH >= 30"
+)
 
-plaice <- calcIndex(species_itis = 172877,
-                    stock_abbrev = "UNIT",
-                    IndexType = "Default",
-                    doLogin = FALSE,
-                    calibration = "B_CAL")
+plaice <- calcIndex(
+  species_itis = 172877,
+  stock_abbrev = "UNIT",
+  IndexType = "Default",
+  doLogin = FALSE,
+  calibration = "B_CAL"
+)
 
-winterFlounder <- calcIndex(species_itis = 172905,
-                            stock_abbrev = "GOMWF",
-                            IndexType = "Default",
-                            doLogin = FALSE,
-                            calibration = "B_CAL")
+winterFlounder <- calcIndex(
+  species_itis = 172905,
+  stock_abbrev = "GOMWF",
+  IndexType = "Default",
+  doLogin = FALSE,
+  calibration = "B_CAL"
+)
 
-customExample <- calcIndex(IndexType = "Custom",
-                           surveyTowData = winterFlounder$all_tows) # Because tows were not resampled this will create the same output as IndexType = "Default"
+customExample <- calcIndex(
+  IndexType = "Custom",
+  surveyTowData = winterFlounder$all_tows
+) # Because tows were not resampled this will create the same output as IndexType = "Default"
 }

@@ -7,22 +7,22 @@
 calc.uncertainty(log.est = NULL, log.se = NULL)
 }
 \arguments{
-\item{log.est}{An estimated time series in log space, no default.}
+\item{log.est}{Numeric vector. Estimated time series on the log scale. No default.}
 
-\item{log.se}{A vector of log standard errors corresponding to the estimated time series, no default.}
+\item{log.se}{Numeric vector. Standard errors of \code{log.est} on the log scale, same length as \code{log.est}. No default.}
 }
 \value{
-A data frame containing:
+A data frame with columns:
 \itemize{
-\item{est - Time series of estimated values}
-\item{se - Accompanying standard errors}
-\item{CV - Accompanying CVs}
-\item{lo_95 - Lower 95\% confidence intervals}
-\item{hi_95 - Upper 95\% confidence intervals}
-\item{lo_90 - Lower 90\% confidence intervals}
-\item{hi_90 - Upper 90\% confidence intervals}
+\item est - Time series of estimated values, \code{exp(log.est)}
+\item se - \code{exp(log.se)}
+\item CV - Lognormal CV, \code{sqrt(exp(log.se^2) - 1)}
+\item lo_90 - Lower 90\% confidence bound
+\item hi_90 - Upper 90\% confidence bound
+\item lo_95 - Lower 95\% confidence bound
+\item hi_95 - Upper 95\% confidence bound
 }
 }
 \description{
-Calculate CV, 90\% and 95\% CI given a model estimate and standard error.
+Calculate the CV, 90\% and 95\% confidence intervals, and related quantities for a time series given log-scale estimates and standard errors (e.g., from \code{TMB::sdreport()}).
 }

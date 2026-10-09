@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{wrapIsmooth}
 \alias{wrapIsmooth}
-\title{wrapIsmooth}
+\title{Standardize, plot, and run Ismooth}
 \usage{
 wrapIsmooth(
   data,

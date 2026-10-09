@@ -2,18 +2,18 @@
 % Please edit documentation in R/pstarcalc.R
 \name{calc_pstar}
 \alias{calc_pstar}
-\title{Function to calculate P* FROM RELATIVE BIOMASS AND COUNCIL POLICY}
+\title{Calculate P* from relative biomass and Council policy}
 \usage{
 calc_pstar(relB)
 }
 \arguments{
-\item{relB}{B/Bmsy}
+\item{relB}{Numeric. Single value of B/Bmsy (unitless). Must be a scalar, since it is used in `if` conditions.}
 }
 \value{
-P*
+Numeric. P* value between 0 and 0.49.
 }
 \description{
-Calculates P* using input of the Biomass relative to target
+Calculates P* from biomass relative to target (B/Bmsy) using the MAFMC P* policy. P* is 0 at or below B/Bmsy = 0.1 (fishery closed), rises linearly to 0.45 at B/Bmsy = 1, then to 0.49 at B/Bmsy = 1.5, where it plateaus.
 }
 \examples{
 Pstar <- calc_pstar(1.55)

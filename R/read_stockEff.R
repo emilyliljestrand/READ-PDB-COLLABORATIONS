@@ -1,4 +1,5 @@
-#' @title read_stockEff
+#' Read stockEff products into R
+#'
 #' @description Function reads stockEff products into R and saves as a time-stamped list.
 #' Options allow data to be pulled for different species, stocks, production status, modules, and sex types.
 #' This is essentially an R function wrapper around the "Connecting to StockEff via R" example user guide in confluence.
@@ -10,10 +11,10 @@
 #' @param mode A string indicating production "prod" or pre-production "test" modes, default = "prod"
 #' @param module A string indicating the module for which products will be pulled, no default. Options include:
 #' \itemize{
-#'   \item{"survey" - Correspond to SV tab in stockEff}
-#'   \item{"commercial" - Correspond to CF tab in stockEff}
-#'   \item{"observer" - Correspond to OB tab in stockEff}
-#'   \item{Nothing yet available for MRIP tab (as of 3/6/24)}
+#'   \item "survey" - Correspond to SV tab in stockEff
+#'   \item "commercial" - Correspond to CF tab in stockEff
+#'   \item "observer" - Correspond to OB tab in stockEff
+#'   \item Nothing yet available for MRIP tab (as of 3/6/24)
 #' }
 #' @param product A vector of strings corresponding to the CSV files available in the SV modual of STOCKEFF, names should NOT need to include ".csv" extensions. No default.
 #' @param outdir A directory where temporary files will be stored during processing (deleted when function finishes running), and final RDS object will be saved. Default to here::here().
@@ -45,11 +46,10 @@ read_stockEff <- function(doLogin = FALSE,
                           outdir = here::here(),
                           saveout = TRUE,
                           outname = NULL){
-  
-#   #library(httr)
-#   #library(keyring)
-  
-  if(doLogin == TRUE){ # Ask for credentials and establish connection, otherwise assumes connection already exists (e.g. if you don't want to type the credentials every time you call this function within the same script)
+
+  # When doLogin is TRUE, prompt for credentials and establish a connection; otherwise assume a connection already exists
+  # (e.g., if you don't want to type credentials every time you call this function within the same script)
+  if(doLogin == TRUE){
     # Log in to stockEff - prompts user to enter username and password
     login <- list(
       username = rstudioapi::askForPassword("Enter stockEff user name"),
@@ -63,10 +63,10 @@ read_stockEff <- function(doLogin = FALSE,
   stockEff_storage <- NULL
   
   
-  # Pull selected products from stock eff CSV files
-  for(iproduct in 1:length(product)){
-    
-    # Pull data as binary file, format & save in storage object
+  # ---- Pull selected products from stockEff CSV files ----
+  for(iproduct in seq_along(product)){
+
+    # Pull data as text, read into a data frame, and store in the storage list
     if(doLogin == TRUE){
       res = GET(paste0("https://internal.nefsc.noaa.gov/stockeff/public/products?product=", product[iproduct], "&module=", module, "&species_itis=",species_itis, "&stock_abbrev=",stock_abbrev, "&sex_type=",sex_type, "&mode=",mode, "&source=all&type=csv"))
       stockEff_storage[[iproduct]] <- readr::read_delim(content(res,"text"), delim=",", show_col_types = FALSE) # Read text with comma separation rather than writing .csv to/from local machine
@@ -78,22 +78,15 @@ read_stockEff <- function(doLogin = FALSE,
         httr2::resp_body_string() |>
         readr::read_csv(show_col_types = FALSE)
     }
-    #bin <- content(res, "raw")
-    #writeBin(bin, paste0(outdir,"/temp_stockEff.csv")) ## Name your file something meaningful here if you want to reference outside of R.
-    
-    
-    # Remove temporary file
-    #file.remove(paste0(outdir,"/temp_stockEff.csv"))
-    
   }
-  
+
   # Name storage objects in order they were added
   names(stockEff_storage) <- product
-  
-  # Add date data was stored
+
+  # Add date data was stored (date only, time portion dropped)
   stockEff_storage$pull_date <- Sys.time() %>% str_split_i(., " ", i=1)
-  
-  # Save final storage object as RDS
+
+  # ---- Save final storage object as RData (filename is timestamped) ----
   if(saveout ==TRUE){
     if(is.null(outname) == TRUE){
       outname <- paste0("stockEff_", module, "_", stockEff_storage$pull_date, ".RData")

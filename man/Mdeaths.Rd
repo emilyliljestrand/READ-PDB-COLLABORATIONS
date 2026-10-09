@@ -7,19 +7,21 @@
 Mdeaths(mod = NULL)
 }
 \arguments{
-\item{mod}{An rds from a WHAM fit}
+\item{mod}{A WHAM fitted model object (the result of `fit_wham()`, typically read from an rds file). Must contain `rep` (MAA, ZAA, NAA) and `input` (data, years).}
 }
 \value{
-A dataframe with two columns. Year and Deaths(000s mt)
+A data.frame with two columns: `Year` and `Deaths` (000s metric tons), one row per model year.
 }
 \description{
-Calculates the amount (000s metric tons) of fish dying given the assumed or estimated M; uses Jan-1 biomass, so an approximation
+Calculates the amount (000s metric tons) of fish dying each year given the assumed or estimated M. Uses Jan-1 weight-at-age, so the result is an approximation.
 }
 \examples{
-mod.dir="m168"
-write.dir <- paste("C:/Herring/2022 Assessment/Assessments/WHAM",mod.dir,sep="/")
+\dontrun{
+mod.dir <- "m168"
+write.dir <- paste("C:/Herring/2022 Assessment/Assessments/WHAM", mod.dir, sep = "/")
 setwd(write.dir)
-mod <- readRDS(paste0(mod.dir,".rds"))
-m168deaths=Mdeaths(mod=mod)
-plot(m168deaths$Year,m168deaths$Deaths,type='o',ylab="Dead Fish (000's mt)",xlab="")
+mod <- readRDS(paste0(mod.dir, ".rds"))
+m168deaths <- Mdeaths(mod = mod)
+plot(m168deaths$Year, m168deaths$Deaths, type = "o", ylab = "Dead Fish (000's mt)", xlab = "")
+}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_stockEff.R
 \name{read_stockEff}
 \alias{read_stockEff}
-\title{read_stockEff}
+\title{Read stockEff products into R}
 \usage{
 read_stockEff(
   doLogin = FALSE,
@@ -30,10 +30,10 @@ read_stockEff(
 
 \item{module}{A string indicating the module for which products will be pulled, no default. Options include:
 \itemize{
-  \item{"survey" - Correspond to SV tab in stockEff}
-  \item{"commercial" - Correspond to CF tab in stockEff}
-  \item{"observer" - Correspond to OB tab in stockEff}
-  \item{Nothing yet available for MRIP tab (as of 3/6/24)}
+  \item "survey" - Correspond to SV tab in stockEff
+  \item "commercial" - Correspond to CF tab in stockEff
+  \item "observer" - Correspond to OB tab in stockEff
+  \item Nothing yet available for MRIP tab (as of 3/6/24)
 }}
 
 \item{product}{A vector of strings corresponding to the CSV files available in the SV modual of STOCKEFF, names should NOT need to include ".csv" extensions. No default.}

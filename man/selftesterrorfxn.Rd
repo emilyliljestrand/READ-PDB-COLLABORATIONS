@@ -2,30 +2,20 @@
 % Please edit documentation in R/multi_selftestplot.R
 \name{selftesterrorfxn}
 \alias{selftesterrorfxn}
-\title{multi_selftestplot}
+\title{Calculate relative error for a WHAM self-test}
 \usage{
 selftesterrorfxn(metric = NULL, mod = NULL, selftest = NULL)
 }
 \arguments{
-\item{mod}{result of fit_wham.}
+\item{metric}{A string, one of `"SSB"`, `"Fbar"`, or `"Rec"`.}
 
-\item{selftest}{result of self_test applied to mod.}
+\item{mod}{Result of `fit_wham()`, providing the true values in `rep` and years in `input`.}
 
-\item{pngprefix}{(default=NULL) prefix added to default names for all saved png files.}
-
-\item{save.direct}{directory where you want png plots saved.}
+\item{selftest}{Result of the self-test, where `selftest[[1]]` is a list of simulation reports.}
 }
 \value{
-saves 3 png files, one each for F, recruitment, and SSB, to the specified directory.
+A data frame with columns `mean`, `median`, `Year`, `low`, and `hi`, one row per year.
 }
 \description{
-Automated creation of plots from a (multi)WHAM simulation self-test. Main plot shows mean, median, and 95%CI. 
-Relative error = (Est-True)/True computed for F, R, and SSB.
-The multi_selftestplot requires another function, selftesterrorfxn, which is included below. Users should not need to explicitly call the selftesterrorfxn. It gets called within multi_selftestplot.
-}
-\examples{
-mod=fit_wham(input,...)
-selftest=self_test(mod,...)
-multi_selftestplot(mod=mod,selftest = selftest,pngprefix = "pngname",save.direct = "C:/yourdirectory/here")
-
+Calculates the relative error, (Est - True) / True, for SSB, F (Fbar), or recruitment across all self-test simulations, along with the mean, median, and approximate 95% CI of the error by year. Called internally by `multi_selftestplot()`; users should not need to call it directly.
 }

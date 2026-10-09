@@ -13,6 +13,8 @@ clean_stockeff_survey_data(
 )
 }
 \arguments{
+\item{mydata}{tibble with columns YEAR, SEASON, PURPOSE_CODE, INDEX_TYPE, INDEX (can be read from StockEff csv file, other columns allowed)}
+
 \item{mypurpose}{code for survey type in StockEff (NEFSC bottom trawl survey = 10)}
 
 \item{myseasons}{vector of seasons, e.g., c("SPRING", "FALL")}
@@ -20,8 +22,6 @@ clean_stockeff_survey_data(
 \item{myindextype}{character string "Biomass (kg/tow)" or "Abundance (numbers/tow)"}
 
 \item{myfills}{tibble of Year, Series, Howfill (latter can be "avg", "pre", "post"), set to NULL if none, default=NULL}
-
-\item{data}{tibble with columns YEAR, SEASON, PURPOSE_CODE, INDEX_TYPE, INDEX (can be read from StockEff csv file, other columns allowed)}
 }
 \value{
 tibble of Year, Series, Index with Series having up to FILLED_SPRING, FALL, FILLED_FALL, FILLED_FALL_LAGGED levels

@@ -7,18 +7,21 @@
 fit_hindcast(model, peel, drop)
 }
 \arguments{
-\item{model}{An rds from a WHAM fit}
+\item{model}{A WHAM model object (an rds from a WHAM fit) with random effects; the input data and parameter list are taken from it.}
 
-\item{peel}{An integer indicating how many years are peeled from the terminal year, just as in a retro}
+\item{peel}{Integer. Number of years peeled from the terminal year, as in a retro.}
 
-\item{drop}{A named list with 'indices' and 'index_paa', where each element is a vector of indices/index_paa to drop in each hindcast. To not drop any indices or index_paa in a hindcast, set to NA.}
+\item{drop}{A named list with `indices` and `index_paa`, where each element is a vector of index numbers (for abundance indices and age compositions, respectively) to drop in each hindcast. To not drop any indices or index_paa in a hindcast, set to `NA`.}
 }
 \value{
-A WHAM model fit
+A WHAM model fit (as returned by `fit_wham()`).
 }
 \description{
-Fit hindcast model to data, dropping specified indices and years of data specified by the peel
+Refits a WHAM model with the terminal `peel` years of selected indices and
+index age compositions switched off, as in a retrospective (hindcast) peel.
 }
 \examples{
- fit_hindcast(model=WHAMRUN.rds, peel=1, drop=list(indices=1:2, index_paa=1:2))
+\dontrun{
+fit_hindcast(model = WHAMRUN.rds, peel = 1, drop = list(indices = 1:2, index_paa = 1:2))
+}
 }

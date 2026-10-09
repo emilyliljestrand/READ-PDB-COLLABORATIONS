@@ -2,7 +2,7 @@
 % Please edit documentation in R/P-star.basic.table.R
 \name{pstartable}
 \alias{pstartable}
-\title{Conduct the P* projections for the MAFMC}
+\title{Tabulate the P* projections for the MAFMC}
 \usage{
 pstartable(
   mod = NULL,
@@ -14,40 +14,39 @@ pstartable(
 )
 }
 \arguments{
-\item{mod}{An rds from a WHAM fit}
+\item{mod}{A WHAM fitted model object (rds from a WHAM fit) with `years` and projection-capable structure.}
 
-\item{SSBmsy}{the SSBmsy proxy used to calculate ratio between biomass and reference point}
+\item{SSBmsy}{The SSBmsy proxy used to calculate the ratio between biomass and the reference point.}
 
-\item{catch.year1}{the amount of catch in the assessment year (usually the ABC)}
+\item{catch.year1}{The amount of catch in the assessment year (usually the ABC).}
 
-\item{CV}{the level of uncertainty}
+\item{projyr}{Number of years to project into the future (integer, default = 3).}
 
-\item{avg.abc}{average ABC, if using, specify, otherwise don't specify}
+\item{CV}{Coefficient of variation of the OFL used in `ABC()` and `inv_ABC()` (default = 1.5).
+Units must match what `ABC()` expects (a proportion, e.g., 0.6); see the example.}
 
-\item{proj.yr}{how many years to project into the future}
+\item{avg.abc}{Optional average ABC. If supplied, it replaces the calculated catch for the
+intermediate projection years; leave NULL (default) otherwise.}
 }
 \value{
-A table containing:
-\itemize{
-  \item{Year - projection Year}
-  \item{OFL - overfishing limit}
-  \item{ABC - allowable biological catch}
-  \item{SSB/SSBMSY - ratio between SSB in that year and reference point}
-  \item{F - fishing mortality}
-  \item{SSB - spawning stock biomass}
-  \item{P* - Pstar value}
-}
+A data frame with one row per projection year and columns `Year`, `OFL`, `ABC`,
+  `B/BMSY`, `F`, `SSB`, and `P*`. The first entry of `OFL` and `B/BMSY`/`P*` is `"NA"`
+  because these are not computed for the first projection year.
 }
 \description{
-Conducts the P* projections, which incorporates uncertainty and risk in ABC calculation from OFL using a fitted WHAM model
+Conducts the P* projections, which incorporate uncertainty and risk in the ABC calculation
+from the OFL using a fitted WHAM model, and summarizes them in a table (year, OFL, ABC,
+B/BMSY, F, SSB, and P*).
 }
 \examples{
+\dontrun{
 mod <- readRDS("Modeling/Run3/fit.RDS")
-SSBmsy <- 11225        
+SSBmsy <- 11225
 catch.year1 <- 7557
-CV <- 60 
-pstar60 <- pstar(mod,SSBmsy,catch.year1,CV=CV)
+CV <- 0.6  # ABC() expects a fraction (0.6 = 60\%)
+pstar60 <- pstartable(mod, SSBmsy, catch.year1, CV = CV)
 write.csv(pstar60, "Projections/Pstar60.csv", row.names = FALSE)
+}
 }
 \author{
 E Liljestrand 7-19-2024, expanded code provided by C Adams for butterfish 7-5-2022

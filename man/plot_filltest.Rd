@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{plot_filltest}
 \alias{plot_filltest}
-\title{plot_filltest}
+\title{Plot results of the filltest comparison}
 \usage{
 plot_filltest(res, mytitle, printplots = FALSE)
 }

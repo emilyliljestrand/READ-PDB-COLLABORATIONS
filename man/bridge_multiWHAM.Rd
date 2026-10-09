@@ -26,11 +26,11 @@ bridge_multiWHAM(
 \value{
 A list containing the following:
 \itemize{
-  \item{sdrep_summary - Summary of joined sdrep objects, repeated labels indicate differences in estimated values (rounded to 3 decimals)}
-  \item{different_pars - Vector of parameter names that had different estimates between the single and multi-wham models}
-  \item{tab - Table of AIC and Mohn's rho values by model}
-  \item{out - Comparison plots}
-  \item{sdrep_diff - Table of parameter estimates that differ between single and multi-wham versions of the model}
+  \item sdrep_summary - Summary of joined sdrep objects, repeated labels indicate differences in estimated values (rounded to 3 decimals)
+  \item different_pars - Vector of parameter names that had different estimates between the single and multi-wham models
+  \item tab - Table of AIC and Mohn's rho values by model
+  \item out - Comparison plots
+  \item sdrep_diff - Table of parameter estimates that differ between single and multi-wham versions of the model
   #!!! Need to add a check here for the bias correction setting since the defaults differ and this is an easy change to forget about when switching
 }
 }
@@ -40,6 +40,6 @@ Compares a single-wham model to a multi-wham model with 1 stock and 1 area to br
 \examples{
 mod_single <- readRDS(file = here::here("Bridge_runs", "9_bridge_reviseCV_NEFSC", "9_bridge_model.rds"))
 mod_multi <- readRDS(file = here::here("Bridge_runs", "12_bridge_updateWHAM", "12_bridge_model.rds"))
-bridge_multiWHAM(mod_single = mod_single, mod_multi = mod_multi, fdir = here::here("Bridge_runs/12_bridge_updateWHAM"), table.opts= list(save.csv = TRUE))
+bridge_multiWHAM(mod_single = mod_single, mod_multi = mod_multi, fdir = here::here("Bridge_runs/12_bridge_updateWHAM"), table.opts = list(save.csv = TRUE))
 
 }

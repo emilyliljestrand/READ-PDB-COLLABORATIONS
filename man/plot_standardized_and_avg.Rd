@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{plot_standardized_and_avg}
 \alias{plot_standardized_and_avg}
-\title{plot_standardized_and_avg}
+\title{Plot standardized indices and their average}
 \usage{
 plot_standardized_and_avg(data, mytitle)
 }

@@ -2,27 +2,27 @@
 % Please edit documentation in R/create.brp.text.R
 \name{create.brp.text}
 \alias{create.brp.text}
-\title{Function to create the brp text}
+\title{Create BRP text}
 \usage{
 create.brp.text(brp.name = NULL, round.digits = 3, brp.table = NULL)
 }
 \arguments{
-\item{brp.name}{A string for the type of BRP, options include: 'SSBproxy', 'MSYproxy', and 'Fproxy', no default.}
+\item{brp.name}{Character. Type of BRP. Options include: "SSBproxy", "MSYproxy", and "Fproxy". No default.}
 
-\item{round.digits}{The number of digits to round BRPs, default = 3.}
+\item{round.digits}{Integer. Number of digits to round BRP values to, default = 3.}
 
-\item{brp.table}{A table containing the following columns:
+\item{brp.table}{A data frame containing the following columns:
 \itemize{
-  \item{BRP - Name of the BRP}
-  \item{est - BRP estimates}
-  \item{lo_95 - Lower 95\% confidence bound}
-  \item{hi_95 - Upper 95\% confidence bound}
-  \item{source - Model source, either "prior" for prior assessment or "MT" for current assessment}
+  \item BRP - Name of the BRP
+  \item est - BRP estimates
+  \item lo_95 - Lower 95\% confidence bound
+  \item hi_95 - Upper 95\% confidence bound
+  \item source - Model source, either "prior" for prior assessment or "MT" for current assessment
 }}
 }
 \value{
-A string for the BRP text including 95% CI.
+A character vector of length 2. The first element is the rounded prior assessment estimate. The second is the current estimate formatted as "est (lo - hi)".
 }
 \description{
-Function to create the brp text
+Creates formatted text for a biological reference point (BRP), giving the prior assessment estimate and the current assessment estimate with its 95% confidence interval.
 }

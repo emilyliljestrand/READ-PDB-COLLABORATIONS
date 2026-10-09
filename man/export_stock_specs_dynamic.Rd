@@ -2,7 +2,7 @@
 % Please edit documentation in R/export_stock_specs_dynamic.R
 \name{export_stock_specs_dynamic}
 \alias{export_stock_specs_dynamic}
-\title{export_stock_specs_dynamic}
+\title{Export current stock specifications from StockEff to Excel}
 \usage{
 export_stock_specs_dynamic(
   dbconn = NULL,
@@ -57,23 +57,24 @@ Hardened Dynamic StockEff Specification Extractor - scrapes stockEff tables for 
 \examples{
 \dontrun{
 # For Commercial landings (Using existing connection)
-export_stock_specs_dynamic(dbconn
-                           ,module = "CF"
-                           ,itis = "172873"
-                           ,stock = "UNIT"
-                           ,sa_year = 2024
-                           ,assessment = "MT2"
-                           ,out_dir = paste0(getwd(),"/ConfirmSpecs/")
+export_stock_specs_dynamic(dbconn,
+  module = "CF",
+  itis = "172873",
+  stock = "UNIT",
+  sa_year = 2024,
+  assessment = "MT2",
+  out_dir = paste0(getwd(), "/ConfirmSpecs/")
 )
 
 # Dynamic login mode (If connection is NULL)
-export_stock_specs_dynamic(dbconn = NULL
-                           ,module = "CF"
-                           ,itis = "172873"
-                           ,stock = "UNIT"
-                           ,sa_year = 2024
-                           ,assessment = "MT2"
-                           ,out_dir = paste0(getwd(),"/ConfirmSpecs/")
+export_stock_specs_dynamic(
+  dbconn = NULL,
+  module = "CF",
+  itis = "172873",
+  stock = "UNIT",
+  sa_year = 2024,
+  assessment = "MT2",
+  out_dir = paste0(getwd(), "/ConfirmSpecs/")
 )
 }
 }

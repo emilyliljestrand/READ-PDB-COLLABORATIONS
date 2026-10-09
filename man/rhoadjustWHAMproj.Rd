@@ -18,8 +18,10 @@ A table of SSB and catch for every projection year showing the original values a
 Function to conduct WHAM projections applying a single Mohn's rho adjustment to all ages. Built for multi-WHAM, but not all features supported. Should first run with rho=0 to see how close an approximation the function provides.
 }
 \examples{
+\dontrun{
 modproj <- readRDS("test.RDS")
-mytest <- rhoadjustWHAMproj(modproj, rho=0) # make sure get same projected SSB and catch as WHAM did, if not then stop here
-mytable15 <- rhoadjustWHAMproj(modproj, rho=0.15) # adjust first year of projections using an input rho value
-mytablerhoSSB <- rhoadjustWHAMproj(modproj, rho=NULL) # use rho for SSB - assumes retro has been run and saved in modproj object
+mytest <- rhoadjustWHAMproj(modproj, rho = 0) # make sure get same projected SSB and catch as WHAM did, if not then stop here
+mytable15 <- rhoadjustWHAMproj(modproj, rho = 0.15) # adjust first year of projections using an input rho value
+mytablerhoSSB <- rhoadjustWHAMproj(modproj, rho = NULL) # use rho for SSB - assumes retro has been run and saved in modproj object
+}
 }

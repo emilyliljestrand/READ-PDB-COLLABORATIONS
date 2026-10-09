@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{fill_hole}
 \alias{fill_hole}
-\title{fill_hole}
+\title{Fill a hole in a survey time series}
 \usage{
 fill_hole(data, year, season, howfill)
 }

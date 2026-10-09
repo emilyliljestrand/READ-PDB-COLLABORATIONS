@@ -1,20 +1,26 @@
-#' @title Leave-one-out
-#' 
-#' @description refits a WHAM model sequentially dropping one index at a time 
-#' 
-#' @param mod An rds from a WHAM fit
-#' @param dosdrep TRUE - whether or not to calculate standard deviations
-#' 
-#' @return A named list with each WHAM fit, where the name is of the index dropped
+#' Leave-one-index-out model refits
 #'
-#' @examples 
-#' mod=readRDS("insert path to a WHAM.rds")
-#' LOO.mods=LOO(mod=mod,dosdrep=TRUE)
-#' You can add the base model to LOO.mods after the fact LOO.mods[["base"]]=mod
-#' compare_wham_models can work to create comparison plots
+#' Refits a WHAM model sequentially, dropping one index at a time (its aggregate index data,
+#' age compositions, and catchability). Each refit is returned so that the effect of each
+#' index can be compared with the base model.
+#'
+#' @param mod A WHAM rds object from a fit (the base model), containing `input`, `parList`, and `input$data` elements.
+#' @param dosdrep Logical, default TRUE. Whether or not to calculate standard deviations (passed to `fit_wham()` as `do.sdrep`).
+#'
+#' @return A named list with each WHAM fit, where the name is the index dropped (taken from `index_names`).
+#'
+#' @examples
+#' \dontrun{
+#' mod <- readRDS("insert path to a WHAM.rds")
+#' LOO.mods <- LOO(mod = mod, dosdrep = TRUE)
+#' # The base model can be added to LOO.mods after the fact
+#' LOO.mods[["base"]] <- mod
+#' # compare_wham_models can be used to create comparison plots
+#' }
 #' @export
 
 LOO=function(mod=NULL,dosdrep=TRUE){
+  # Structure notes for WHAM inputs used below:
   #input$par$logit_selpars: rows = selblocks, columns are age-specific pars (1-n_ages), 
   #then logistic selpars, then double logistic selpars
   #input$data$selblock_pointer_fleets (n_years x n_fleets) 

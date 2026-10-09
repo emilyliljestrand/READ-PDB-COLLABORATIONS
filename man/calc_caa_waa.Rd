@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_caa_waa.R
 \name{calc_caa_waa}
 \alias{calc_caa_waa}
-\title{calc_caa_waa}
+\title{Calculate annual catch- and weight-at-age}
 \usage{
 calc_caa_waa(
   ALK = NULL,
@@ -15,33 +15,37 @@ calc_caa_waa(
 \arguments{
 \item{ALK}{A long-format table containing the following columns:
 \itemize{
-  \item{YEAR}
-  \item{LENGTH - Length bin}
-  \item{AGE - Age bin}
-  \item{PROP - proportion-at-age for a given length and YEAR}
-  \item{BLOCK_ID - Block ID used to match ALK to expanded lengths from stockEff}
+  \item YEAR
+  \item LENGTH - Length bin
+  \item AGE - Age bin
+  \item PROP - proportion-at-age for a given length and YEAR
+  \item BLOCK_ID - Block ID used to match ALK to expanded lengths from stockEff
 }}
 
 \item{stockEff_mode}{String specifying version of stockEff to query, options include: "test", "prod". Default = "prod"}
 
 \item{stockEff_module}{A string indicating the module for which products will be pulled, no default. Options include:
 \itemize{
-  \item{"survey" - Correspond to SV tab in stockEff}
-  \item{"commercial" - Correspond to CF tab in stockEff}
-  \item{"observer" - Correspond to OB tab in stockEff}
-  \item{Nothing yet available for MRIP tab (as of 3/6/24)}
+  \item "survey" - Correspond to SV tab in stockEff
+  \item "commercial" - Correspond to CF tab in stockEff
+  \item "observer" - Correspond to OB tab in stockEff
+  \item Nothing yet available for MRIP tab (as of 3/6/24)
 }}
 
-\item{species_itis}{Species itis code}
+\item{species_itis}{Species ITIS code (numeric or character), used to filter the stockEff query.}
 
 \item{connection}{A DBI or ROracle connection object to the NEFSC Oracle database.
 If NULL (default), the function will prompt for credentials via rstudioapi
 and manage the connection/disconnection automatically. If a connection
 is provided, the user is responsible for closing it after the function executes.}
 }
+\value{
+A data frame with one row per `YEAR` and `AGE`, containing `TOT_NO_AT_AGE` (expanded number of fish), `TOT_WT_AT_AGE` (total weight, kg), and `AVG_WT_KG` (mean weight-at-age, kg).
+}
 \description{
-Calculate annual catch- and weight-at-age, using expanded lengths from stockEff and ALK with time blocking that matches stockEff blocking
-
+Calculates annual catch-at-age (number of fish) and weight-at-age (mean weight, kg) by combining expanded lengths from stockEff with an age-length key (ALK). Time blocking matches the stockEff blocking.
+}
+\details{
 NOTE: If you receive the following error try setting connection = NULL and rerun function to re-establish oracle connection:
-      Error: unable to find an inherited method for function ‘dbGetQuery’ for signature ‘conn = "NULL", statement = "character"’
+      Error: unable to find an inherited method for function 'dbGetQuery' for signature 'conn = "NULL", statement = "character"'
 }

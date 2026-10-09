@@ -2,7 +2,7 @@
 % Please edit documentation in R/borrow_ages.R
 \name{borrow_ages}
 \alias{borrow_ages}
-\title{borrow_ages}
+\title{Borrow ages to fill gaps in an age-length key}
 \usage{
 borrow_ages(
   missing_ages,
@@ -14,34 +14,42 @@ borrow_ages(
 )
 }
 \arguments{
-\item{missing_ages}{A table containing length-age pairs that lack age information to fill via borrowing_procedure !!! probably want to describe columns/content better}
+\item{missing_ages}{A data frame of length-age-year combinations that lack age information. Expected
+columns include `YEAR`, `LENGTH`, `NESPP4`, `SEM`, `QTR`, and `REGION_ID`.}
 
-\item{CF_ages}{A table of commercial ages to use in borrowing !!! describe what stockEff products used to generate these and other ages table arguments}
+\item{CF_ages}{A data frame of commercial length-age data (donor pool) with columns `YEAR`, `LENGTH`,
+`AGE`, `NESPP4`, `SEM`, `QTR`, `REGION_ID`, `NO_AT_AGE`, and `SOURCE`, typically derived from stockEff commercial products.}
 
-\item{SV_ages}{A table of survey ages to use in borrowing}
+\item{SV_ages}{A data frame of survey length-age data (donor pool) with columns `YEAR`, `LENGTH`, `AGE`,
+`SEM`, `REGION_ID`, `NO_AT_AGE`, and `SOURCE`, typically derived from stockEff survey products.}
 
-\item{OB_ages}{PLACEHOLDER FOR NOW: A table of observer ages to use in borrowing}
+\item{OB_ages}{PLACEHOLDER FOR NOW: A data frame of observer ages to use in borrowing. Not currently used in the logic.}
 
 \item{borrow_procedure}{A string specifying the borrowing logic to apply to fill age gaps for ALK, options include:
 \itemize{
-  \item{"seqCFSV_S_A" - Default, Borrow: 1) CF within semester, 2) CF within year, 3) SV within semester, 4) SV within year} 
-  \item{"seqSA_CF_SV" - Borrow: 1) CF within semester (i.e. pool mkt categories), 2) SV within semester, 3) CF within year, 4) SV within year} 
+  \item "seqCFSV_S_A" - Default, Borrow: 1) CF within semester, 2) CF within year, 3) SV within semester, 4) SV within year
+  \item "seqSA_CF_SV" - Borrow: 1) CF within semester (i.e. pool mkt categories), 2) SV within semester, 3) CF within year, 4) SV within year
 }}
 
-\item{borrow_2020_option}{A string specifying how 2020 borrowing is handled, options include: 
+\item{borrow_2020_option}{A string specifying how 2020 borrowing is handled, options include:
 \itemize{
-  \item{Default uses borrow_procedure to fill 2020 gaps, in most cases this results in no gap filling because borrowing does not occur across years}
-  \item{"none" = do not borrow to fill 2020 age gaps}
-  \item{"combCFSV_1921" = Combine CF and SV data, fill 2020 using all observations from 2019 and 2021}
+  \item Default uses borrow_procedure to fill 2020 gaps, in most cases this results in no gap filling because borrowing does not occur across years
+  \item "none" = do not borrow to fill 2020 age gaps
+  \item "combCFSV_all1921" = Combine CF and SV data, fill 2020 using all observations from 2019 and 2021
+  \item "combCFSV_fill1921" = Combine CF and SV data from 2019 and 2021, used only to fill 2020 gaps still remaining after borrow_procedure, first by semester then annually
 }}
 }
 \value{
 A list containing:
 \itemize{
-  \item{all_fills - A table containing borrowed data used to fill gaps for missing_ages}
-  \item{remaining_gaps - A table of missing_ages for which gaps could not be filled using borrow_procedure logic}
+  \item all_fills - A table containing borrowed data used to fill gaps for missing_ages
+  \item remaining_gaps - A table of missing_ages for which gaps could not be filled using borrow_procedure logic
 }
 }
 \description{
-borrow_ages
+Fills length-age combinations that lack age information (gaps in the ALK) by borrowing
+age data from donor pools (commercial and survey) at progressively coarser levels of
+matching (e.g., same length, year, semester, and region first; then dropping region,
+market category, semester, or year). Each borrowing tier is only applied to gaps left
+unfilled by the previous tiers.
 }

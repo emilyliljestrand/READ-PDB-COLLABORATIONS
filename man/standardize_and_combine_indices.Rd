@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{standardize_and_combine_indices}
 \alias{standardize_and_combine_indices}
-\title{standardize_and_combine_indices}
+\title{Standardize and combine survey indices}
 \usage{
 standardize_and_combine_indices(
   data,

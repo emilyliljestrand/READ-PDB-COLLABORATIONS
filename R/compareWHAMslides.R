@@ -1,7 +1,7 @@
-#' @title Auto-generate model comparison slides 
-#' 
-#' @description Compare diagnostics side by side for 2 WHAM models in pptx slides or 2+ in revealjs .html output. 
-#' 
+#' @title Auto-generate model comparison slides
+#'
+#' @description Compare diagnostics side by side for 2 WHAM models in pptx slides or 2+ in revealjs .html output.
+#'
 #' @param plotPaths A vector of file paths pointing to plots folders created by plot_wham_output for all models to be compared, must end in "plots_png".
 #' @param format A string indicating the type of format to use ("pptx" or "revealjs"), default = "pptx"
 #' @param slideOut A file path for the resulting quarto document that formats the slides (must end in .qmd extension), no default.
@@ -9,7 +9,7 @@
 #' @param fleetNames A vector of fleet names in the order that they are provided in plotted results (assumes same fleets for all models, if this isn't the case use fleetGroup instead)
 #' @param fleetGroup A named list containing a vector of fleet numbers to compare across all models (e.g. if number of fleets or order differs across models specify which fleets should be compared), if provided these names are used to label slides instead of fleetNames. Length of all vectors in list must equal length of plotPaths, provide 0 if fleet does not exist for a given model
 #' @param indexNames A vector of index names in the order that they are numbered in plotted results (assumes same indices for all models, if this isn't the case use indexGroup instead)
-#' @param indexGroup A named list containing a vector of index numbers to compare across all models (e.g. if index order differs or an index is split in 2 for one model), if provided these names are used to label slides instead of indexNames. Length of all vectors in list must equal length of plotPaths, provide 0 if index does not exist for a given model   
+#' @param indexGroup A named list containing a vector of index numbers to compare across all models (e.g. if index order differs or an index is split in 2 for one model), if provided these names are used to label slides instead of indexNames. Length of all vectors in list must equal length of plotPaths, provide 0 if index does not exist for a given model
 #' @param modelNames A vector of model names in the order that their plotted results are listed in plotPaths
 #' @param AIC An optimal vector of AIC values for each model (order consistent with plotPaths) for inclusion in a summary table
 #' @param Gradient An optimal vector of gradient convergence values for each model (order consistent with plotPaths) for inclusion in a summary table
@@ -20,55 +20,63 @@
 #' @param Overfished An optimal vector of overfished status for each model (order consistent with plotPaths) for inclusion in a summary table
 #' @param Overfishing An optimal vector of overfishing status for each model (order consistent with plotPaths) for inclusion in a summary table
 #' @param Rho_adjust An optimal vector of rho adjustment checks for each model (order consistent with plotPaths) for inclusion in a summary table
-#' 
+#'
 #' NOTE: Assumes stock and region names are consistent across multi-wham models OR compare single-wham model that lacks stock/region labels to a multi-wham model
 #' WARNING: Code was updated to accommodate multi-wham results but the following settings have not been tested thoroughly following these edits: multiple stocks/regions/fleets, indices with non-standard names (i.e. not "index_1", "index_2"...), fleet and index groups (revert to version of function prior to July 2026 for functioning single-wham implementation)
-#' 
+#'
 #' @return A .qmd and output slides in the selected slideOut directory to compare the specified model runs
 #'
 #' @examples
 #' # Generalized file paths and labels are purely for demonstration and would need to be updated to run on individual machines
-#' compareWHAMslides(plotPaths = c(here::here("model1_folder/plots_png"),
-#'                                 here::here("model2_folder/plots_png")),
-#'               slideOut = here::here("compare_1_2_test.qmd"), slideTitle = "Testing title text",
-#'               fleetNames = "US fleet", indexNames = c("DFO spring index", "NEFSC spring index ", "NEFSC fall index"), modelNames = c("model 1", "model 2"))
-#' # Example with models where default index numbering does not correspond 
-#' compareWHAMslides(plotPaths = c(here::here("model1_folder/plots_png"),
-#'                                 here::here("model3_folder/plots_png")),
-#'               slideOut = here::here("compare_split_run.qmd"), slideTitle = "Testing title text",
-#'               indexGroups = list(DFO_spring = c(1,1), NEFSC_spring_Alb = c(2,2), NEFSC_spring_Big = c(2,3), NEFSC_fall_Alb = c(3,4), NEFSC_fall_Big = c(3,5), NEFSC_fall_BigOnly = c(0,5)))
+#' compareWHAMslides(
+#'   plotPaths = c(
+#'     here::here("model1_folder/plots_png"),
+#'     here::here("model2_folder/plots_png")
+#'   ),
+#'   slideOut = here::here("compare_1_2_test.qmd"), slideTitle = "Testing title text",
+#'   fleetNames = "US fleet", indexNames = c("DFO spring index", "NEFSC spring index ", "NEFSC fall index"), modelNames = c("model 1", "model 2")
+#' )
+#' # Example with models where default index numbering does not correspond
+#' compareWHAMslides(
+#'   plotPaths = c(
+#'     here::here("model1_folder/plots_png"),
+#'     here::here("model3_folder/plots_png")
+#'   ),
+#'   slideOut = here::here("compare_split_run.qmd"), slideTitle = "Testing title text",
+#'   indexGroups = list(DFO_spring = c(1, 1), NEFSC_spring_Alb = c(2, 2), NEFSC_spring_Big = c(2, 3), NEFSC_fall_Alb = c(3, 4), NEFSC_fall_Big = c(3, 5), NEFSC_fall_BigOnly = c(0, 5))
+#' )
 #' @export
 
 compareWHAMslides <- function(plotPaths = NULL,
-                          format = "pptx",
-                          slideOut = NULL,
-                          slideTitle = NULL,
-                          fleetNames = NULL,
-                          fleetGroups = NULL,
-                          indexNames = NULL,
-                          indexGroups = NULL,
-                          modelNames = NULL,
-                          AIC = NULL,
-                          Gradient = NULL,
-                          Convergence = NULL,
-                          MohnsRho_F = NULL,
-                          MohnsRho_SSB = NULL,
-                          MohnsRho_R = NULL,
-                          Overfished = NULL,
-                          Overfishing = NULL, 
-                          Rho_adjust = NULL){
+                              format = "pptx",
+                              slideOut = NULL,
+                              slideTitle = NULL,
+                              fleetNames = NULL,
+                              fleetGroups = NULL,
+                              indexNames = NULL,
+                              indexGroups = NULL,
+                              modelNames = NULL,
+                              AIC = NULL,
+                              Gradient = NULL,
+                              Convergence = NULL,
+                              MohnsRho_F = NULL,
+                              MohnsRho_SSB = NULL,
+                              MohnsRho_R = NULL,
+                              Overfished = NULL,
+                              Overfishing = NULL,
+                              Rho_adjust = NULL) {
   ##### Setup #####
-#   library(quarto)
-  
+  #   library(quarto)
+
   ncol <- length(plotPaths)
-  widths <- rep(100/length(plotPaths), ncol)
+  widths <- rep(100 / length(plotPaths), ncol)
   plotpath <- plotPaths
-  if(is.null(modelNames)){
+  if (is.null(modelNames)) {
     label_runs <- paste0("Run ", c(1:ncol))
-  } else{
+  } else {
     label_runs <- modelNames
   }
-  
+
   # ID max number of default fleets and indices across models
   nfleet <- NULL
   nindex <- NULL
@@ -76,759 +84,746 @@ compareWHAMslides <- function(plotPaths = NULL,
   nregion <- NULL
   regionNames <- NULL
   stockNames <- NULL
-  for(imodel in 1:length(plotPaths)){
+  for (imodel in seq_along(plotPaths)) {
     nfleet[imodel] <- list.files(paste0(plotPaths[imodel], "/input_data"), pattern = "catch_age_comp") %>% length()
     nindex[imodel] <- list.files(paste0(plotPaths[imodel], "/results"), pattern = "index") %>% length()
     nstock[imodel] <- list.files(paste0(plotPaths[imodel], "/retro"), pattern = "SSB_retro_relative") %>% length() # Should have 1 plot per stock
     nregion[imodel] <- list.files(paste0(plotPaths[imodel], "/retro"), pattern = "Fbar_retro_relative") %>% length() # Should have 1 plot per region
-    regionNames[imodel] <- list.files(paste0(plotPaths[imodel], "/retro"), pattern = "Fbar_retro_relative") %>% str_split_i(., pattern = "_Fbar_retro_relative", i=1) # Will assign "Fbar_retro_relative.png" regionName for single-wham models but not used
-    stockNames[imodel] <- list.files(paste0(plotPaths[imodel], "/retro"), pattern = "SSB_retro_relative") %>% str_split_i(., pattern = "_SSB_retro_relative", i=1) # Will assign "SSB_retro_relative.png" stockName for single-wham models but not used
+    regionNames[imodel] <- list.files(paste0(plotPaths[imodel], "/retro"), pattern = "Fbar_retro_relative") %>% str_split_i(., pattern = "_Fbar_retro_relative", i = 1) # Will assign "Fbar_retro_relative.png" regionName for single-wham models but not used
+    stockNames[imodel] <- list.files(paste0(plotPaths[imodel], "/retro"), pattern = "SSB_retro_relative") %>% str_split_i(., pattern = "_SSB_retro_relative", i = 1) # Will assign "SSB_retro_relative.png" stockName for single-wham models but not used
   }
-  
-  uniqueStocks <- stockNames %>% as.data.frame() %>% filter(. != "SSB_retro_relative.png") %>% unique() # drop placeholder stock/region added for single-wham models
-  uniqueRegions <- regionNames %>% as.data.frame() %>% filter(. != "Fbar_retro_relative.png") %>% unique()
-  
+
+  uniqueStocks <- stockNames %>%
+    as.data.frame() %>%
+    filter(. != "SSB_retro_relative.png") %>%
+    unique() # drop placeholder stock/region added for single-wham models
+  uniqueRegions <- regionNames %>%
+    as.data.frame() %>%
+    filter(. != "Fbar_retro_relative.png") %>%
+    unique()
+
   # Fleet names
-  if(is.null(fleetGroups) == TRUE){
+  if (is.null(fleetGroups) == TRUE) {
     nfleet <- max(nfleet) # Loop over maximum unique fleets, assume number order corresponds across fleets
-    
-    if(is.null(fleetNames)){
+
+    if (is.null(fleetNames)) {
       fleetNames <- paste0("fleet_", c(1:nfleet))
       fleetTitle <- paste0("## Goodness of fit to ", fleetNames)
     } else {
       fleetTitle <- paste0("## Goodness of fit to ", fleetNames)
     }
-  } else{ # Otherwise use fleetGroups to define what fleets are compared
+  } else { # Otherwise use fleetGroups to define what fleets are compared
     nfleet <- length(fleetGroups)
-    
+
     fleetNames <- names(fleetGroups)
     fleetTitle <- paste0("## Goodness of fit to ", fleetNames)
   }
-  
+
   # Index names
-  if(is.null(indexGroups) == TRUE){
+  if (is.null(indexGroups) == TRUE) {
     nindex <- max(nindex) # Loop over maximum unique indices, assume number order corresponds across indices
     indexLabels <- paste0("index_", c(1:nindex)) # Labels used in .png figure names
-    
-    if(is.null(indexNames)){
+
+    if (is.null(indexNames)) {
       indexNames <- paste0("index ", c(1:nindex))
       indexTitle <- paste0("## Goodness of fit to ", indexNames)
-    } else{
+    } else {
       indexTitle <- paste0("## Goodness of fit to ", indexNames)
     }
-  } else{ # Otherwise use indexGroups to define what indices are compared
+  } else { # Otherwise use indexGroups to define what indices are compared
     nindex <- length(indexGroups)
-    
+
     indexNames <- names(indexGroups)
     indexTitle <- paste0("## Goodness of fit to ", indexNames) # Pull index slide names from indexGroups list since not following a default numbering
   }
-  
-  
+
+
   ##### Write quarto slide structure to file based on setup dimensions #####
   write("---", slideOut, append = FALSE)
-  if(is.null(slideTitle)){
+  if (is.null(slideTitle)) {
     write("title: 'Compare WHAM Model Results'", slideOut, append = TRUE)
-  } else{
+  } else {
     write(paste0("title: '", slideTitle, "'"), slideOut, append = TRUE)
   }
-  
-  if(format == "revealjs"){
+
+  if (format == "revealjs") {
     write(paste0("format: "), slideOut, append = TRUE)
-    write(paste0("  ", format,":"), slideOut, append = TRUE)
-    write("    width: '150%'", slideOut, append = TRUE) # Increases size of plots, 
+    write(paste0("  ", format, ":"), slideOut, append = TRUE)
+    write("    width: '150%'", slideOut, append = TRUE) # Increases size of plots,
     write("    embed-resources: true", slideOut, append = TRUE) # Prevent separate folder with figures from being generated
-  } else if(format == "pptx"){
+  } else if (format == "pptx") {
     write(paste0("format: ", format), slideOut, append = TRUE)
   }
-  
+
   write("editor: visual", slideOut, append = TRUE)
   write("---", slideOut, append = TRUE)
-  
+
   # Add fleet plots
-  for(ifleet in 1:max(nfleet)){
-    
-    for(istock in 1:length(uniqueStocks)){
-      for(iregion in 1:length(uniqueRegions)){
-        
+  for (ifleet in 1:max(nfleet)) {
+    for (istock in seq_along(uniqueStocks)) {
+      for (iregion in seq_along(uniqueRegions)) {
         write(paste(fleetTitle[ifleet], ": stock", istock, "region", iregion, sep = " "), slideOut, append = TRUE)
         write(":::: {.columns}", slideOut, append = TRUE)
-        for(icol in 1:ncol){
-          if(is.null(fleetGroups) == FALSE){ # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
+        for (icol in 1:ncol) {
+          if (is.null(fleetGroups) == FALSE) { # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
             iFleet <- fleetGroups[ifleet][[1]][icol]
-          } else{
+          } else {
             iFleet <- ifleet
           }
-          write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+          write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
           write(label_runs[icol], slideOut, append = TRUE)
           write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-          if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_4panel_fleet_",iFleet))) == 1){ # Include in column only if ifleet has plot - follows single-wham naming convention
-            write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Catch_4panel_fleet_", iFleet, ".png"), sep="/"),"){width=150%}"), slideOut, append = TRUE)
-          } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_4panel_fleet_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE) %>% grep(., pattern = uniqueRegions[iregion], value = TRUE)) == 1){ # If fleet and region match and plot exists
-            write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Catch_4panel_fleet_", fleetNames[ifleet], "_", uniqueRegions[iregion], ".png"), sep="/"),"){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
+          if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_4panel_fleet_", iFleet))) == 1) { # Include in column only if ifleet has plot - follows single-wham naming convention
+            write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_4panel_fleet_", iFleet, ".png"), sep = "/"), "){width=150%}"), slideOut, append = TRUE)
+          } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_4panel_fleet_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE) %>% grep(., pattern = uniqueRegions[iregion], value = TRUE)) == 1) { # If fleet and region match and plot exists
+            write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_4panel_fleet_", fleetNames[ifleet], "_", uniqueRegions[iregion], ".png"), sep = "/"), "){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
           }
           write(":::", slideOut, append = TRUE)
         }
         write("::::", slideOut, append = TRUE)
-        
       } # End loop over regions
     } # End loop over stocks
     # else{
     #   write("testhere", slideOut, append = TRUE)
     #   write(paste0(fleetNames[ifleet], uniqueRegions[iregion]), slideOut, append = TRUE)
     # }
-    
-    
+
+
     write(paste0(fleetTitle[ifleet], " OSA residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(fleetGroups) == FALSE){ # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(fleetGroups) == FALSE) { # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
         iFleet <- fleetGroups[ifleet][[1]][icol]
-      } else{
+      } else {
         iFleet <- ifleet
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_catch_4panel_fleet_",iFleet))) == 1){ # Include in column only if ifleet has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics", paste0("OSA_resid_catch_4panel_fleet_", iFleet,".png"), sep="/"),")"), slideOut, append = TRUE)
-      } 
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_catch_4panel_fleet_", iFleet))) == 1) { # Include in column only if ifleet has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_catch_4panel_fleet_", iFleet, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write(paste0(fleetTitle[ifleet], " age comp OSA residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(fleetGroups) == FALSE){ # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(fleetGroups) == FALSE) { # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
         iFleet <- fleetGroups[ifleet][[1]][icol]
-      } else{
+      } else {
         iFleet <- ifleet
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_osa_resids_fleet_",iFleet))) == 1){ # Include in column only if ifleet has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics", paste0("Catch_age_comp_osa_resids_fleet_", iFleet,".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_catch_4_panel_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE)) == 1){ # If fleet plot exists
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("OSA_resid_catch_4_panel_", fleetNames[ifleet], ".png"), sep="/"),"){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_osa_resids_fleet_", iFleet))) == 1) { # Include in column only if ifleet has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_osa_resids_fleet_", iFleet, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_catch_4_panel_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE)) == 1) { # If fleet plot exists
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_catch_4_panel_", fleetNames[ifleet], ".png"), sep = "/"), "){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write(paste0(fleetTitle[ifleet], " age comp OSA residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(fleetGroups) == FALSE){ # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(fleetGroups) == FALSE) { # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
         iFleet <- fleetGroups[ifleet][[1]][icol]
-      } else{
+      } else {
         iFleet <- ifleet
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_fleet_",iFleet))) == 1){ # Include in column only if ifleet has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("OSA_resid_paa_6panel_fleet_", iFleet, ".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE)) == 1){ # If fleet plot exists
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("OSA_resid_paa_6panel_", fleetNames[ifleet], ".png"), sep="/"),"){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_fleet_", iFleet))) == 1) { # Include in column only if ifleet has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_paa_6panel_fleet_", iFleet, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE)) == 1) { # If fleet plot exists
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_paa_6panel_", fleetNames[ifleet], ".png"), sep = "/"), "){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write(paste0(fleetTitle[ifleet], " age comp obs-pred residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(fleetGroups) == FALSE){ # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(fleetGroups) == FALSE) { # If fleetGroups exist, iFleet is pulled from group instead of default numbering and nfleet (~ line 63) is based on the number of groups
         iFleet <- fleetGroups[ifleet][[1]][icol]
-      } else{
+      } else {
         iFleet <- ifleet
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_resids_fleet_",iFleet))) == 1){ # Include in column only if ifleet has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics", paste0("Catch_age_comp_resids_fleet_", iFleet,".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_resids_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE)) == 1){ # If fleet plot exists
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Catch_age_comp_resids_", fleetNames[ifleet], ".png"), sep="/"),"){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_resids_fleet_", iFleet))) == 1) { # Include in column only if ifleet has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_resids_fleet_", iFleet, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_resids_")) %>% grep(., pattern = fleetNames[ifleet], value = TRUE)) == 1) { # If fleet plot exists
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_resids_", fleetNames[ifleet], ".png"), sep = "/"), "){width=150%}"), slideOut, append = TRUE) # Multi-wham naming convention
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
-  } # End loop over fleets 
-  
+  } # End loop over fleets
+
   # Add index plots
-  for(isurvey in 1:nindex){
-    for(iregion in 1:length(uniqueRegions)){
-      
+  for (isurvey in 1:nindex) {
+    for (iregion in seq_along(uniqueRegions)) {
       write(indexTitle[isurvey], slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        if(is.null(indexGroups) == FALSE){ # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
+      for (icol in 1:ncol) {
+        if (is.null(indexGroups) == FALSE) { # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
           iSurvey <- indexGroups[isurvey][[1]][icol]
-        } else{
+        } else {
           iSurvey <- isurvey
         }
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Index_4panel_",iSurvey))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Index_4panel_", iSurvey, ".png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Index_4panel_", indexLabels[isurvey], "_", uniqueRegions[iregion]))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Index_4panel_", indexLabels[isurvey], "_", uniqueRegions[iregion], ".png"), sep="/"),")"), slideOut, append = TRUE)
+        if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Index_4panel_", iSurvey))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Index_4panel_", iSurvey, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Index_4panel_", indexLabels[isurvey], "_", uniqueRegions[iregion]))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Index_4panel_", indexLabels[isurvey], "_", uniqueRegions[iregion], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
         }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
     } # End loop over regions
-    
-    
-    
+
+
+
     write(paste0(indexTitle[isurvey], " OSA residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(indexGroups) == FALSE){ # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(indexGroups) == FALSE) { # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
         iSurvey <- indexGroups[isurvey][[1]][icol]
-      } else{
+      } else {
         iSurvey <- isurvey
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_catch_4panel_index_",iSurvey))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics", paste0("OSA_resid_catch_4panel_index_", iSurvey, ".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_catch_4panel_", indexNames[isurvey], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("OSA_resid_catch_4panel_", indexNames[isurvey], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_catch_4panel_index_", iSurvey))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_catch_4panel_index_", iSurvey, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_catch_4panel_", indexNames[isurvey], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_catch_4panel_", indexNames[isurvey], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write(paste0(indexTitle[isurvey], " age comp OSA residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(indexGroups) == FALSE){ # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(indexGroups) == FALSE) { # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
         iSurvey <- indexGroups[isurvey][[1]][icol]
-      } else{
+      } else {
         iSurvey <- isurvey
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_osa_resids_index_",iSurvey))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics", paste0("Catch_age_comp_osa_resids_index_", iSurvey, ".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_osa_resids_", indexNames[isurvey], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Catch_age_comp_osa_resids_", indexNames[isurvey], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_osa_resids_index_", iSurvey))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_osa_resids_index_", iSurvey, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_osa_resids_", indexNames[isurvey], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_osa_resids_", indexNames[isurvey], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write(paste0(indexTitle[isurvey], " age comp OSA residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(indexGroups) == FALSE){ # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(indexGroups) == FALSE) { # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
         iSurvey <- indexGroups[isurvey][[1]][icol]
-      } else{
+      } else {
         iSurvey <- isurvey
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_index_",iSurvey))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("OSA_resid_paa_6panel_index_", iSurvey,".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_", indexNames[isurvey], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("OSA_resid_paa_6panel_", indexNames[isurvey], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_index_", iSurvey))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_paa_6panel_index_", iSurvey, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("OSA_resid_paa_6panel_", indexNames[isurvey], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("OSA_resid_paa_6panel_", indexNames[isurvey], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write(paste0(indexTitle[isurvey], " age comp obs-pred residuals"), slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      if(is.null(indexGroups) == FALSE){ # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
+    for (icol in 1:ncol) {
+      if (is.null(indexGroups) == FALSE) { # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
         iSurvey <- indexGroups[isurvey][[1]][icol]
-      } else{
+      } else {
         iSurvey <- isurvey
       }
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_resids_index_",iSurvey))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics", paste0("Catch_age_comp_resids_index_", iSurvey, ".png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/diagnostics"), pattern = paste0("Catch_age_comp_resids_", indexNames[isurvey], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"diagnostics",paste0("Catch_age_comp_resids_", indexNames[isurvey], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_resids_index_", iSurvey))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_resids_index_", iSurvey, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/diagnostics"), pattern = paste0("Catch_age_comp_resids_", indexNames[isurvey], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "diagnostics", paste0("Catch_age_comp_resids_", indexNames[isurvey], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
   } # End loop over indices
 
   # Other diagnostics
   write("## Goodness of fit: residual time series", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"diagnostics", "Residuals_time.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "diagnostics", "Residuals_time.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
+
   # Results plots
   write("## Model results: CV for SSB, R, F", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"results", "CV_SSB_Rec_F.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "results", "CV_SSB_Rec_F.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
+
   write("## Model results: F by fleet", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"results", "F_byfleet.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "results", "F_byfleet.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
-  for(istock in 1:length(uniqueStocks)){
-    
+
+  for (istock in seq_along(uniqueStocks)) {
     write("## Model results: M-at-age", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "M_at_age.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results", "M_at_age.png", sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("M_at_age_", uniqueStocks[istock], "_.png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results",paste0("M_at_age_", uniqueStocks[istock], "_.png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "M_at_age.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", "M_at_age.png", sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("M_at_age_", uniqueStocks[istock], "_.png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", paste0("M_at_age_", uniqueStocks[istock], "_.png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write("## Model results: SSB-at-age", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "SSB_at_age.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results", "SSB_at_age.png", sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("SSB_at_age_", uniqueStocks[istock], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results",paste0("SSB_at_age_", uniqueStocks[istock], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "SSB_at_age.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", "SSB_at_age.png", sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("SSB_at_age_", uniqueStocks[istock], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", paste0("SSB_at_age_", uniqueStocks[istock], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write("## Model results: SSB-R", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "SSB_Rec.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results", "SSB_Rec.png", sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("SSB_Rec_", uniqueStocks[istock], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results",paste0("SSB_Rec_", uniqueStocks[istock], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "SSB_Rec.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", "SSB_Rec.png", sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("SSB_Rec_", uniqueStocks[istock], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", paste0("SSB_Rec_", uniqueStocks[istock], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write("## Model results: logSSB-logR", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "SSB_Rec_loglog.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results", "SSB_Rec_loglog.png", sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("SSB_Rec_loglog_", uniqueStocks[istock], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results",paste0("SSB_Rec_loglog_", uniqueStocks[istock], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "SSB_Rec_loglog.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", "SSB_Rec_loglog.png", sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("SSB_Rec_loglog_", uniqueStocks[istock], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", paste0("SSB_Rec_loglog_", uniqueStocks[istock], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write("## Model results: SSB & R time series", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "SSB_Rec_time.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results", "SSB_Rec_time.png", sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("SSB_Rec_time_", uniqueStocks[istock], ".png"))) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"results",paste0("SSB_Rec_time_", uniqueStocks[istock], ".png"), sep="/"),")"), slideOut, append = TRUE)
+      if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "SSB_Rec_time.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", "SSB_Rec_time.png", sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("SSB_Rec_time_", uniqueStocks[istock], ".png"))) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "results", paste0("SSB_Rec_time_", uniqueStocks[istock], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
       }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
   } # End loop over stocks
-  
-  
+
+
   write("## Model results: M-at-age Tile", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"results", "MAA_tile.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "results", "MAA_tile.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
-  for(istock in 1:length(uniqueStocks)){
-    for(iregion in 1:length(uniqueRegions)){
-      
+
+  for (istock in seq_along(uniqueStocks)) {
+    for (iregion in seq_along(uniqueRegions)) {
       write("##  Numbers-at-age", slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "Numbers_at_age.png")) == 1){ # 
-          write(paste0("![](", paste(plotpath[icol],"results", "Numbers_at_age.png", sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("Numbers_at_age_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"results",paste0("Numbers_at_age_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"), sep="/"),")"), slideOut, append = TRUE)
+        if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "Numbers_at_age.png")) == 1) { #
+          write(paste0("![](", paste(plotpath[icol], "results", "Numbers_at_age.png", sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("Numbers_at_age_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "results", paste0("Numbers_at_age_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
         }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
+
       write("## Model results: Numbers-at-age proportion", slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/results"), pattern = "Numbers_at_age_proportion.png")) == 1){ # 
-          write(paste0("![](", paste(plotpath[icol],"results", "Numbers_at_age_proportion.png", sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("Numbers_at_age_proportion_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"results",paste0("Numbers_at_age_proportion_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"), sep="/"),")"), slideOut, append = TRUE)
+        if (length(list.files(paste0(plotpath[icol], "/results"), pattern = "Numbers_at_age_proportion.png")) == 1) { #
+          write(paste0("![](", paste(plotpath[icol], "results", "Numbers_at_age_proportion.png", sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("Numbers_at_age_proportion_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "results", paste0("Numbers_at_age_proportion_", uniqueStocks[istock], "_", uniqueRegions[iregion], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
         }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
     } # End loop over regions
   } # End loop over stocks
-  
+
   write("## Model results: Catchability", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"results", "q_time_series.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "results", "q_time_series.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
+
   write("## Model results: Selectivity-at-age", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"results", "SelAA_tile.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "results", "SelAA_tile.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
-  for(ifleet in 1:nfleet){
-    for(iregion in 1:length(uniqueRegions)){
-      write(paste0("## Model results: Fleet ",fleetNames[ifleet], " selectivity"), slideOut, append = TRUE)
+
+  for (ifleet in 1:nfleet) {
+    for (iregion in seq_along(uniqueRegions)) {
+      write(paste0("## Model results: Fleet ", fleetNames[ifleet], " selectivity"), slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("Selectivity_fleet",iFleet))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"results", paste0("Selectivity_fleet", iFleet,".png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("Selectivity_", fleetNames[ifleet], "_", uniqueRegions[iregion], ".png"))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"results",paste0("Selectivity_", fleetNames[ifleet], "_", uniqueRegions[iregion], ".png"), sep="/"),")"), slideOut, append = TRUE)
+        if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("Selectivity_fleet", iFleet))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "results", paste0("Selectivity_fleet", iFleet, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("Selectivity_", fleetNames[ifleet], "_", uniqueRegions[iregion], ".png"))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "results", paste0("Selectivity_", fleetNames[ifleet], "_", uniqueRegions[iregion], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
         }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
     } # End loop over regions
   } # End loop over fleet selectivities
-  
-  for(isurvey in 1:nindex){
-    for(iregion in 1:length(uniqueRegions)){
+
+  for (isurvey in 1:nindex) {
+    for (iregion in seq_along(uniqueRegions)) {
       write(paste0("## Model results: Index ", indexNames[isurvey], " selectivity"), slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        if(is.null(indexGroups) == FALSE){ # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
+      for (icol in 1:ncol) {
+        if (is.null(indexGroups) == FALSE) { # If indexGroups exist, isurvey is pulled from group instead of default numbering and nindex (~ line 58) is based on the number of groups
           iSurvey <- indexGroups[isurvey][[1]][icol]
-        } else{
+        } else {
           iSurvey <- isurvey
         }
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("Selectivity_index",iSurvey))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"results", paste0("Selectivity_index", iSurvey,".png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/results"), pattern = paste0("Selectivity_", indexLabels[isurvey], "_", uniqueRegions[iregion], ".png"))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"results",paste0("Selectivity_", indexLabels[isurvey], "_", uniqueRegions[iregion], ".png"), sep="/"),")"), slideOut, append = TRUE)
+        if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("Selectivity_index", iSurvey))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "results", paste0("Selectivity_index", iSurvey, ".png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/results"), pattern = paste0("Selectivity_", indexLabels[isurvey], "_", uniqueRegions[iregion], ".png"))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "results", paste0("Selectivity_", indexLabels[isurvey], "_", uniqueRegions[iregion], ".png"), sep = "/"), ")"), slideOut, append = TRUE)
         }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
     } # End loop over regions
   } # End loop over index selectivities
-  
+
   write("## Model results: SSB & F trends", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"results", "SSB_F_trend.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "results", "SSB_F_trend.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
 
-  
-  for(iregion in 1:length(uniqueRegions)){
-    
+
+  for (iregion in seq_along(uniqueRegions)) {
     # Add Mohn's rho plots
     write("## Model consistency: Fbar Relative Mohn's Rho", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueRegions[iregion], "_Fbar_retro_relative.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-        write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueRegions[iregion], "_Fbar_retro_relative.png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "Fbar_retro_relative.png")) == 1){ # Include in column only if isurvey has plot 
-        write(paste0("![](", paste(plotpath[icol],"retro", "Fbar_retro_relative.png", sep="/"),")"), slideOut, append = TRUE)
-      } 
+      if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueRegions[iregion], "_Fbar_retro_relative.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+        write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueRegions[iregion], "_Fbar_retro_relative.png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "Fbar_retro_relative.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "retro", "Fbar_retro_relative.png", sep = "/"), ")"), slideOut, append = TRUE)
+      }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write("## Model consistency: Fbar Mohn's Rho", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueRegions[iregion], "_Fbar_retro.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-        write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueRegions[iregion], "_Fbar_retro.png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "Fbar_retro.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"retro", "Fbar_retro.png", sep="/"),")"), slideOut, append = TRUE)
-      } 
+      if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueRegions[iregion], "_Fbar_retro.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+        write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueRegions[iregion], "_Fbar_retro.png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "Fbar_retro.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "retro", "Fbar_retro.png", sep = "/"), ")"), slideOut, append = TRUE)
+      }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
   } # End loop over region
-  
-  
-  for(istock in 1:length(uniqueStocks)){
-    
+
+
+  for (istock in seq_along(uniqueStocks)) {
     write("## Model consistency: SSB Relative Mohn's Rhos", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueStocks[istock], "_SSB_retro_relative.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-        write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueStocks[istock], "_SSB_retro_relative.png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "SSB_retro_relative.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"retro", "SSB_retro_relative.png", sep="/"),")"), slideOut, append = TRUE)
-      } 
+      if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueStocks[istock], "_SSB_retro_relative.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+        write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueStocks[istock], "_SSB_retro_relative.png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "SSB_retro_relative.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "retro", "SSB_retro_relative.png", sep = "/"), ")"), slideOut, append = TRUE)
+      }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
+
     write("## Model consistency: SSB Mohn's Rhos", slideOut, append = TRUE)
     write(":::: {.columns}", slideOut, append = TRUE)
-    for(icol in 1:ncol){
-      write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+    for (icol in 1:ncol) {
+      write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
       write(label_runs[icol], slideOut, append = TRUE)
       write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-      if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueStocks[istock], "_SSB_retro.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-        write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueStocks[istock], "_SSB_retro.png"), sep="/"),")"), slideOut, append = TRUE)
-      } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "SSB_retro.png")) == 1){ # Include in column only if isurvey has plot
-        write(paste0("![](", paste(plotpath[icol],"retro", "SSB_retro.png", sep="/"),")"), slideOut, append = TRUE)
-      } 
+      if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueStocks[istock], "_SSB_retro.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+        write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueStocks[istock], "_SSB_retro.png"), sep = "/"), ")"), slideOut, append = TRUE)
+      } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "SSB_retro.png")) == 1) { # Include in column only if isurvey has plot
+        write(paste0("![](", paste(plotpath[icol], "retro", "SSB_retro.png", sep = "/"), ")"), slideOut, append = TRUE)
+      }
       write(":::", slideOut, append = TRUE)
     }
     write("::::", slideOut, append = TRUE)
-    
   } # End loop over stocks
-  
-  for(istock in 1:length(uniqueStocks)){
-    for(iregion in 1:length(uniqueRegions)){
-      
+
+  for (istock in seq_along(uniqueStocks)) {
+    for (iregion in seq_along(uniqueRegions)) {
       write("## Model consistency: R Relative Mohn's Rho", slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro_relative.png"))) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro_relative.png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "NAA_age1_retro_relative.png")) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-          write(paste0("![](", paste(plotpath[icol],"retro", "NAA_age1_retro_relative.png", sep="/"),")"), slideOut, append = TRUE)
-        } 
+        if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro_relative.png"))) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro_relative.png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "NAA_age1_retro_relative.png")) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+          write(paste0("![](", paste(plotpath[icol], "retro", "NAA_age1_retro_relative.png", sep = "/"), ")"), slideOut, append = TRUE)
+        }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
+
       write("## Model consistency: R Mohn's Rho", slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-          write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro.png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "NAA_age1_retro.png")) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"retro", "NAA_age1_retro.png", sep="/"),")"), slideOut, append = TRUE)
-        } 
+        if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+          write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_age_1_retro.png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "NAA_age1_retro.png")) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "retro", "NAA_age1_retro.png", sep = "/"), ")"), slideOut, append = TRUE)
+        }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
+
       write("## Model consistency: NAA Relative Mohn's Rho", slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro_relative.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-          write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro_relative.png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "NAA_retro_relative.png")) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"retro", "NAA_retro_relative.png", sep="/"),")"), slideOut, append = TRUE)
-        } 
+        if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro_relative.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+          write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro_relative.png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "NAA_retro_relative.png")) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "retro", "NAA_retro_relative.png", sep = "/"), ")"), slideOut, append = TRUE)
+        }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
+
       write("## Model consistency: NAA Mohn's Rho", slideOut, append = TRUE)
       write(":::: {.columns}", slideOut, append = TRUE)
-      for(icol in 1:ncol){
-        write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+      for (icol in 1:ncol) {
+        write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
         write(label_runs[icol], slideOut, append = TRUE)
         write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-        if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro.png"))) == 1){ # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
-          write(paste0("![](", paste(plotpath[icol],"retro",paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro.png"), sep="/"),")"), slideOut, append = TRUE)
-        } else if(length(list.files(paste0(plotpath[icol],"/retro"), pattern = "NAA_retro.png")) == 1){ # Include in column only if isurvey has plot
-          write(paste0("![](", paste(plotpath[icol],"retro", "NAA_retro.png", sep="/"),")"), slideOut, append = TRUE)
-        }  
+        if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro.png"))) == 1) { # Include in column only if isurvey has plot, check multi-wham first since contains single-wham plot name
+          write(paste0("![](", paste(plotpath[icol], "retro", paste0(uniqueStocks[istock], "_", uniqueRegions[iregion], "_NAA_retro.png"), sep = "/"), ")"), slideOut, append = TRUE)
+        } else if (length(list.files(paste0(plotpath[icol], "/retro"), pattern = "NAA_retro.png")) == 1) { # Include in column only if isurvey has plot
+          write(paste0("![](", paste(plotpath[icol], "retro", "NAA_retro.png", sep = "/"), ")"), slideOut, append = TRUE)
+        }
         write(":::", slideOut, append = TRUE)
       }
       write("::::", slideOut, append = TRUE)
-      
     } # End loop over regions
   } # End loop over stocks
-  
-  
 
-  
-  
-  
- 
-  
+
+
+
+
+
+
+
   write("## Model Results: Stock status ", slideOut, append = TRUE)
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    write(paste0("![](", paste(plotpath[icol],"ref_points","Kobe_status.png", sep="/"),")"), slideOut, append = TRUE)
+    write(paste0("![](", paste(plotpath[icol], "ref_points", "Kobe_status.png", sep = "/"), ")"), slideOut, append = TRUE)
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-  
-  write("## Model Results: Rho adjustment check ", slideOut, append = TRUE) #!!! Custom diagnostic I created
+
+  write("## Model Results: Rho adjustment check ", slideOut, append = TRUE) # !!! Custom diagnostic I created
   write(":::: {.columns}", slideOut, append = TRUE)
-  for(icol in 1:ncol){
-    write(paste0("::: {.column width='",widths[icol],"%'}"), slideOut, append = TRUE)
+  for (icol in 1:ncol) {
+    write(paste0("::: {.column width='", widths[icol], "%'}"), slideOut, append = TRUE)
     write(label_runs[icol], slideOut, append = TRUE)
     write("", slideOut, append = TRUE) # Must have empty space or plots not pulled into powerpoint
-    if(length(list.files(paste0(plotpath[icol]), pattern = "rho_adjust.png")) == 1){ # Include in column only if plot exists
-      write(paste0("![](", paste(plotpath[icol],"rho_adjust.png", sep="/"),")"), slideOut, append = TRUE)
+    if (length(list.files(paste0(plotpath[icol]), pattern = "rho_adjust.png")) == 1) { # Include in column only if plot exists
+      write(paste0("![](", paste(plotpath[icol], "rho_adjust.png", sep = "/"), ")"), slideOut, append = TRUE)
     }
     write(":::", slideOut, append = TRUE)
   }
   write("::::", slideOut, append = TRUE)
-    
-    write("## Model Summary", slideOut, append = TRUE)
-    write(capture.output(cat("| Diagnostic | ", paste0(modelNames, " |"))), slideOut, append=TRUE)
-    write(capture.output(cat("| ---------- | ", rep("----- |", ncol))), slideOut, append=TRUE)
-    if(is.null(AIC) == TRUE){
-      write(capture.output(cat("| AIC | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| AIC | ", paste0(AIC,"  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(Gradient)==TRUE){
-      write(capture.output(cat("| Max gradient | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Max gradient | ", paste0(Gradient, "  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(Convergence) == TRUE){
-      write(capture.output(cat("| Converged | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Converged | ", paste0(Convergence, "  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(MohnsRho_F) == TRUE){
-      write(capture.output(cat("| Mohn's Rho: F | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Mohn's Rho: F | ", paste0(MohnsRho_F, "  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(MohnsRho_SSB) == TRUE){
-      write(capture.output(cat("| Mohn's Rho: SSB | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Mohn's Rho: SSB | ", paste0(MohnsRho_SSB, "  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(MohnsRho_R) == TRUE){
-      write(capture.output(cat("| Mohn's Rho: R | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Mohn's Rho: R | ", paste0(MohnsRho_R, "  |"))), slideOut, append=TRUE)
-    }
-    write(capture.output(cat("| Status | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    if(is.null(Overfished) == TRUE){
-      write(capture.output(cat("| Overfished | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Overfished | ", paste0(Overfished, "  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(Overfishing) == TRUE){
-      write(capture.output(cat("| Overfishing | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Overfishing | ", paste0(Overfishing, "  |"))), slideOut, append=TRUE)
-    }
-    if(is.null(Rho_adjust) == TRUE){
-      write(capture.output(cat("| Rho adjustment needed? | ", paste0(rep("  |", ncol)))), slideOut, append=TRUE)
-    } else{
-      write(capture.output(cat("| Rho adjustment needed? | ", paste0(Rho_adjust, "  |"))), slideOut, append=TRUE)
-    }
-    
-  
-  
-  
+
+  write("## Model Summary", slideOut, append = TRUE)
+  write(capture.output(cat("| Diagnostic | ", paste0(modelNames, " |"))), slideOut, append = TRUE)
+  write(capture.output(cat("| ---------- | ", rep("----- |", ncol))), slideOut, append = TRUE)
+  if (is.null(AIC) == TRUE) {
+    write(capture.output(cat("| AIC | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| AIC | ", paste0(AIC, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(Gradient) == TRUE) {
+    write(capture.output(cat("| Max gradient | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Max gradient | ", paste0(Gradient, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(Convergence) == TRUE) {
+    write(capture.output(cat("| Converged | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Converged | ", paste0(Convergence, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(MohnsRho_F) == TRUE) {
+    write(capture.output(cat("| Mohn's Rho: F | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Mohn's Rho: F | ", paste0(MohnsRho_F, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(MohnsRho_SSB) == TRUE) {
+    write(capture.output(cat("| Mohn's Rho: SSB | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Mohn's Rho: SSB | ", paste0(MohnsRho_SSB, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(MohnsRho_R) == TRUE) {
+    write(capture.output(cat("| Mohn's Rho: R | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Mohn's Rho: R | ", paste0(MohnsRho_R, "  |"))), slideOut, append = TRUE)
+  }
+  write(capture.output(cat("| Status | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  if (is.null(Overfished) == TRUE) {
+    write(capture.output(cat("| Overfished | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Overfished | ", paste0(Overfished, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(Overfishing) == TRUE) {
+    write(capture.output(cat("| Overfishing | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Overfishing | ", paste0(Overfishing, "  |"))), slideOut, append = TRUE)
+  }
+  if (is.null(Rho_adjust) == TRUE) {
+    write(capture.output(cat("| Rho adjustment needed? | ", paste0(rep("  |", ncol)))), slideOut, append = TRUE)
+  } else {
+    write(capture.output(cat("| Rho adjustment needed? | ", paste0(Rho_adjust, "  |"))), slideOut, append = TRUE)
+  }
+
+
+
+
   ###### Source resulting file to render slides #####
   quarto:::quarto_render(slideOut)
 }
-
-

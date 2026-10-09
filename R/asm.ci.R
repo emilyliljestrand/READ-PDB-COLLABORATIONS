@@ -1,22 +1,24 @@
-#' @title asm.ci
-#' @description Calculate approximate 95% confidence intervals based on log normal variable and its CV. Used in Dan's autoreporting as default for survey index CI calculations.
+#' @title Approximate confidence intervals for lognormal variables
 #'
-#' @param x A lognormal variable (or vector of variables), no default.
-#' @param cv.x The cv of variable x (or vector of CVs if multiple variables provided), no default.
-#' @param bounds The confidence bound to calculate, default = 95.
+#' @description Calculate approximate confidence intervals for lognormal variables based on the point estimate and its CV. Used in Dan's autoreporting as the default for survey index CI calculations.
 #'
-#' @return A data.frame containing lower (lci) and upper (uci) confidence bounds
+#' @param x Numeric vector. Lognormal point estimate(s) on the original (non-log) scale. No default.
+#' @param cv.x Numeric vector. CV of each variable in `x` (same length as `x`, or length 1). No default.
+#' @param bounds Numeric. Confidence level in percent, default = 95.
+#'
+#' @return A data.frame with columns `lci` (lower confidence bound) and `uci` (upper confidence bound), on the same scale as `x`.
 #' @export
 
-
-asm.ci<-function(x,cv.x,bounds=95){
-  #generate approximate 95% confidence intervals based on log normal variable x
-  #and it's cv. cv.x
-  s<-sqrt(log(1+cv.x^2))
-  s<-ifelse(is.finite(s),s,0)
-  p<-(1-(bounds/100))/2
-  Z<-qnorm(p)
-  lci<-x*exp(Z*(s))
-  uci<-x*exp(-Z*(s))
-  return(data.frame("lci"=lci,"uci"=uci))
+asm.ci <- function(x, cv.x, bounds = 95) {
+  # Approximate log-scale SD from the CV: s = sqrt(log(1 + CV^2))
+  s <- sqrt(log(1 + cv.x^2))
+  # CV of 0 or non-finite CV gives s = 0 (no interval width)
+  s <- ifelse(is.finite(s), s, 0)
+  # Two-sided tail probability, then the matching standard normal quantile
+  p <- (1 - (bounds / 100)) / 2
+  Z <- qnorm(p)
+  # Bounds are multiplicative on the original scale (symmetric in log space)
+  lci <- x * exp(Z * (s))
+  uci <- x * exp(-Z * (s))
+  return(data.frame("lci" = lci, "uci" = uci))
 }

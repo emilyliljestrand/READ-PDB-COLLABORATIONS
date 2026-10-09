@@ -2,24 +2,29 @@
 % Please edit documentation in R/LOO.R
 \name{LOO}
 \alias{LOO}
-\title{Leave-one-out}
+\title{Leave-one-index-out model refits}
 \usage{
 LOO(mod = NULL, dosdrep = TRUE)
 }
 \arguments{
-\item{mod}{An rds from a WHAM fit}
+\item{mod}{A WHAM rds object from a fit (the base model), containing `input`, `parList`, and `input$data` elements.}
 
-\item{dosdrep}{TRUE - whether or not to calculate standard deviations}
+\item{dosdrep}{Logical, default TRUE. Whether or not to calculate standard deviations (passed to `fit_wham()` as `do.sdrep`).}
 }
 \value{
-A named list with each WHAM fit, where the name is of the index dropped
+A named list with each WHAM fit, where the name is the index dropped (taken from `index_names`).
 }
 \description{
-refits a WHAM model sequentially dropping one index at a time
+Refits a WHAM model sequentially, dropping one index at a time (its aggregate index data,
+age compositions, and catchability). Each refit is returned so that the effect of each
+index can be compared with the base model.
 }
 \examples{
-mod=readRDS("insert path to a WHAM.rds")
-LOO.mods=LOO(mod=mod,dosdrep=TRUE)
-You can add the base model to LOO.mods after the fact LOO.mods[["base"]]=mod
-compare_wham_models can work to create comparison plots
+\dontrun{
+mod <- readRDS("insert path to a WHAM.rds")
+LOO.mods <- LOO(mod = mod, dosdrep = TRUE)
+# The base model can be added to LOO.mods after the fact
+LOO.mods[["base"]] <- mod
+# compare_wham_models can be used to create comparison plots
+}
 }

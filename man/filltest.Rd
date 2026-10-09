@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ismooth_functions.R
 \name{filltest}
 \alias{filltest}
-\title{filltest}
+\title{Compare full and filled survey time series with Ismooth}
 \usage{
 filltest(data, YearStart, termyearstart, termyearend, myseries, myfilltests)
 }

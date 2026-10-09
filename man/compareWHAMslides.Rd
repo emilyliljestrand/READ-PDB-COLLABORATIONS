@@ -73,13 +73,21 @@ Compare diagnostics side by side for 2 WHAM models in pptx slides or 2+ in revea
 }
 \examples{
 # Generalized file paths and labels are purely for demonstration and would need to be updated to run on individual machines
-compareWHAMslides(plotPaths = c(here::here("model1_folder/plots_png"),
-                                here::here("model2_folder/plots_png")),
-              slideOut = here::here("compare_1_2_test.qmd"), slideTitle = "Testing title text",
-              fleetNames = "US fleet", indexNames = c("DFO spring index", "NEFSC spring index ", "NEFSC fall index"), modelNames = c("model 1", "model 2"))
-# Example with models where default index numbering does not correspond 
-compareWHAMslides(plotPaths = c(here::here("model1_folder/plots_png"),
-                                here::here("model3_folder/plots_png")),
-              slideOut = here::here("compare_split_run.qmd"), slideTitle = "Testing title text",
-              indexGroups = list(DFO_spring = c(1,1), NEFSC_spring_Alb = c(2,2), NEFSC_spring_Big = c(2,3), NEFSC_fall_Alb = c(3,4), NEFSC_fall_Big = c(3,5), NEFSC_fall_BigOnly = c(0,5)))
+compareWHAMslides(
+  plotPaths = c(
+    here::here("model1_folder/plots_png"),
+    here::here("model2_folder/plots_png")
+  ),
+  slideOut = here::here("compare_1_2_test.qmd"), slideTitle = "Testing title text",
+  fleetNames = "US fleet", indexNames = c("DFO spring index", "NEFSC spring index ", "NEFSC fall index"), modelNames = c("model 1", "model 2")
+)
+# Example with models where default index numbering does not correspond
+compareWHAMslides(
+  plotPaths = c(
+    here::here("model1_folder/plots_png"),
+    here::here("model3_folder/plots_png")
+  ),
+  slideOut = here::here("compare_split_run.qmd"), slideTitle = "Testing title text",
+  indexGroups = list(DFO_spring = c(1, 1), NEFSC_spring_Alb = c(2, 2), NEFSC_spring_Big = c(2, 3), NEFSC_fall_Alb = c(3, 4), NEFSC_fall_Big = c(3, 5), NEFSC_fall_BigOnly = c(0, 5))
+)
 }

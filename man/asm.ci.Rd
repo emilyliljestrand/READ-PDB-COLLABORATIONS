@@ -2,20 +2,20 @@
 % Please edit documentation in R/asm.ci.R
 \name{asm.ci}
 \alias{asm.ci}
-\title{asm.ci}
+\title{Approximate confidence intervals for lognormal variables}
 \usage{
 asm.ci(x, cv.x, bounds = 95)
 }
 \arguments{
-\item{x}{A lognormal variable (or vector of variables), no default.}
+\item{x}{Numeric vector. Lognormal point estimate(s) on the original (non-log) scale. No default.}
 
-\item{cv.x}{The cv of variable x (or vector of CVs if multiple variables provided), no default.}
+\item{cv.x}{Numeric vector. CV of each variable in `x` (same length as `x`, or length 1). No default.}
 
-\item{bounds}{The confidence bound to calculate, default = 95.}
+\item{bounds}{Numeric. Confidence level in percent, default = 95.}
 }
 \value{
-A data.frame containing lower (lci) and upper (uci) confidence bounds
+A data.frame with columns `lci` (lower confidence bound) and `uci` (upper confidence bound), on the same scale as `x`.
 }
 \description{
-Calculate approximate 95% confidence intervals based on log normal variable and its CV. Used in Dan's autoreporting as default for survey index CI calculations.
+Calculate approximate confidence intervals for lognormal variables based on the point estimate and its CV. Used in Dan's autoreporting as the default for survey index CI calculations.
 }

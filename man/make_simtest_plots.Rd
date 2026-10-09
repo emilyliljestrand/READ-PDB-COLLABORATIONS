@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_simtest_plots.R
 \name{make_simtest_plots}
 \alias{make_simtest_plots}
-\title{make_simtest_plots}
+\title{Plots from a WHAM simulation self-test}
 \usage{
 make_simtest_plots(
   mod_selftest,
@@ -30,8 +30,8 @@ make_simtest_plots(
 list of 8 figures, main figure is first one
 }
 \description{
-Automated creation of plots from a WHAM simulation self-test. Main plot shows mean, median, and 5%, 25%, 75%, 95% quantiles. 
-Optional additional plots show only mean with standard error, only median and quantiles, and numerous realizations. 
+Automated creation of plots from a WHAM simulation self-test. Main plot shows mean, median, and 5%, 25%, 75%, 95% quantiles.
+Optional additional plots show only mean with standard error, only median and quantiles, and numerous realizations.
 Percent error (Est-True)/True computed for F, R, and SSB.
 Requires ggplot2, dplyr.
 }

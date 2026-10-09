@@ -40,95 +40,95 @@ fillCF(
 
 \item{tab_blocks}{A list providing the following information to populate the BLOCKS tab: (NOTE: LW_ID is populated by identifying the LW whose associated start and end months completely overlap with the block, otherwise an NA is returned)
 \itemize{
-  \item{nespp4 - A named vector of market categories to include in block tab, where names correspond to the nespp4 codes. No default. Market categories included in the stock definition but excluded here are by default prorated (see tab_prorate for specifics)}
-  \item{dropMarketYr - A table containing the nespp4 market category ("NESPP4" column) to "roll up" (i.e. drop) in the corrsponding year column("YEAR"), if provided landings are redistributed to other categories for that year/region (see "roll up" in Adding and Updating Stocks in StockEff documentation)}
-  \item{block_opt - A string for the following options to specify blocks for each market category and year: 
+  \item nespp4 - A named vector of market categories to include in block tab, where names correspond to the nespp4 codes. No default. Market categories included in the stock definition but excluded here are by default prorated (see tab_prorate for specifics)
+  \item dropMarketYr - A table containing the nespp4 market category ("NESPP4" column) to "roll up" (i.e. drop) in the corrsponding year column("YEAR"), if provided landings are redistributed to other categories for that year/region (see "roll up" in Adding and Updating Stocks in StockEff documentation)
+  \item block_opt - A string for the following options to specify blocks for each market category and year: 
           if = NULL (default), one block for every L-W relationship in tab_lw, 
           if = "MONTH", one block for each month (useful for checking minimum number of lengths exceeded for larger blocks), 
           if = "QUARTER", one block for each quarter,
           if = "SEMESTER", one block for each semester,
           if = "ANNUAL", one block per year for each market category
-          if = "checkLENGTHS", Assumes monthly blocks were submitted to STOCKEFF, checks the number of monthly length samples from biosamp_summary.csv to determine smallest block supported by data for each market category and year. Must also provide minLenSample argument if this option is used.}
-  \item{minLenSample - A number specifying the minimum number of length sampels required to support a given block for a year and market category, used in length imputation check even if block_opt != checkLENGTHS, default = 1}
-  \item{autofillLW - A boolean, if TRUE fills LW_ID based on complete overlap with LW months and years, if FALSE leaves NAs for blocks without a perfect match to LW month and year definition, default = FALSE}
-  \item{mkt_missing - A string to govern years where 1+ market categories not length sampled, default = "keep":
+          if = "checkLENGTHS", Assumes monthly blocks were submitted to STOCKEFF, checks the number of monthly length samples from biosamp_summary.csv to determine smallest block supported by data for each market category and year. Must also provide minLenSample argument if this option is used.
+  \item minLenSample - A number specifying the minimum number of length sampels required to support a given block for a year and market category, used in length imputation check even if block_opt != checkLENGTHS, default = 1
+  \item autofillLW - A boolean, if TRUE fills LW_ID based on complete overlap with LW months and years, if FALSE leaves NAs for blocks without a perfect match to LW month and year definition, default = FALSE
+  \item mkt_missing - A string to govern years where 1+ market categories not length sampled, default = "keep":
            if = "drop" then these years dropped and NAA is not estimated
-           if = "keep" then return NAs for BLOCK_TYPE in these years}
-  \item{check_missing - A boolean, if TRUE check for missing market categories in data_years, also check if is.na(mkt_missing) == FALSE (i.e. if years with missing market categories will be dropped or further processed)}
+           if = "keep" then return NAs for BLOCK_TYPE in these years
+  \item check_missing - A boolean, if TRUE check for missing market categories in data_years, also check if is.na(mkt_missing) == FALSE (i.e. if years with missing market categories will be dropped or further processed)
 }}
 
 \item{tab_prorate}{A list providing the following information to populate the PRORATE tab:
 \itemize{
-  \item{turnOff - A vector of years for which unclassified landings should NOT be prorated, default prorates for all data_years.}
+  \item turnOff - A vector of years for which unclassified landings should NOT be prorated, default prorates for all data_years.
 }}
 
 \item{tab_regions}{A list providing the following information to populate the REGIONS tab:
 \itemize{
-  \item{stat_areas - A list of stat area vectors by region, stat areas should be provided as strings. Example: list("1" = c("511", "512"))}
-  \item{region_custom - An optional data.frame/matrix for complex cases. 
+  \item stat_areas - A list of stat area vectors by region, stat areas should be provided as strings. Example: list("1" = c("511", "512"))
+  \item region_custom - An optional data.frame/matrix for complex cases. 
         Example: data.frame(AREA = c(511, 512, 511), 
                            REGION_ID = c("1", "1", "2"), 
                            YEAR = c(2020, 2020, 2021))
-        This is useful if an AREA changes REGION_ID over time.}
+        This is useful if an AREA changes REGION_ID over time.
 }}
 
 \item{tab_lw}{A matrix or data.frame containing the following named columns of information for each LW data source. Currently only supports blocks with types, start and end months that match LW_PARAMS and are consistent across all years
 \itemize{
-  \item{ALPHA - Alpha parameter for each LW relationship}
-  \item{BETA - Beta parameter for each LW relationship}
-  \item{SOURCE - Description of LW parameter and link to source document}
-  \item{LW_TYPE - Type of LW relationship, options can include "SEMESTER", "ANNUAL", "QUARTER"}
-  \item{LW_ID - ID for each row of the table}
-  \item{MONTH_START - First month that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS}
-  \item{MONTH_END - Last month that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS}
-  \item{YEAR_START - First year that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS}
-  \item{YEAR_END - Last year that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS}
+  \item ALPHA - Alpha parameter for each LW relationship
+  \item BETA - Beta parameter for each LW relationship
+  \item SOURCE - Description of LW parameter and link to source document
+  \item LW_TYPE - Type of LW relationship, options can include "SEMESTER", "ANNUAL", "QUARTER"
+  \item LW_ID - ID for each row of the table
+  \item MONTH_START - First month that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS
+  \item MONTH_END - Last month that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS
+  \item YEAR_START - First year that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS
+  \item YEAR_END - Last year that LW_ID row may be used, processed in tab_BLOCKS and ultimately dropped from tab_LW_PARAMS
 }}
 
 \item{tab_sex}{A list providing the following information to populate the SEX_TYPE tab:
 \itemize{
-  \item{start_yr - The start year for CF data, default = first year in data_years.}
-  \item{end_yr - The end year for CF data, default = last year in data_years.}
+  \item start_yr - The start year for CF data, default = first year in data_years.
+  \item end_yr - The end year for CF data, default = last year in data_years.
 }}
 
 \item{tab_impute}{A list providing rules for filling sampling gaps in the LENGTH_IMPUTATIONS tab:
 \itemize{
-  \item{borrow_from_region - A named list defining spatial donor relationships. 
+  \item borrow_from_region - A named list defining spatial donor relationships. 
         Example: list("5" = "6") means if Region 5 has a sampling hole, 
         borrow the length-frequency distribution from Region 6 for that same 
-        Year and Market Category.}
-  \item{borrow_from_time - A boolean. If TRUE, triggers the constrained temporal 
+        Year and Market Category.
+  \item borrow_from_time - A boolean. If TRUE, triggers the constrained temporal 
         hierarchy if spatial borrowing fails or is not defined. 
         The hierarchy follows: Same Semester (for Quarter holes) > 
-        Same Year (for Semester holes) > Adjacent Years (for Year holes).}
+        Same Year (for Semester holes) > Adjacent Years (for Year holes).
 }}
 
 \item{tab_alk}{A list providing rules for filling gaps in the ALK_HOLES tab:
 \itemize{
-  \item{fill_alk - A boolean. If TRUE, identifies lengths present in landings that 
-        lack corresponding age data and attempts to fill them using hierarchical borrowing. Default = FALSE.}
-  \item{source - A vector of strings identifying data sources for age data gap filling,options are: "commercial", "survey". Default = "commercial", MUST contain "commercial" or ALK borrowing will trigger error} 
-  \item{borrow_procedure - A string specifying the borrowing logic to apply to fill age gaps for ALK:
+  \item fill_alk - A boolean. If TRUE, identifies lengths present in landings that 
+        lack corresponding age data and attempts to fill them using hierarchical borrowing. Default = FALSE.
+  \item source - A vector of strings identifying data sources for age data gap filling,options are: "commercial", "survey". Default = "commercial", MUST contain "commercial" or ALK borrowing will trigger error
+  \item borrow_procedure - A string specifying the borrowing logic to apply to fill age gaps for ALK:
        
-  }
-  \item{borrow_2020_option - A string specifying how 2020 borrowing is handled: 
+  
+  \item borrow_2020_option - A string specifying how 2020 borrowing is handled: 
            "none" = do not borrow to fill 2020 age gaps (default)
            "match_borrow_procedure" = use same logic as borrow_procedure argument,
            
-       } 
-  \item{survey_region - Optional dataframe containing STRATUM and REGION_ID columns specifying the region 
+       
+  \item survey_region - Optional dataframe containing STRATUM and REGION_ID columns specifying the region 
        assignment for each survey stratum. Only required if multiple regions AND survey data used for 
-       borrowing (i.e. "survey" in source list). Default assigns all survey strata to region 1}   
+       borrowing (i.e. "survey" in source list). Default assigns all survey strata to region 1
 }}
 
 \item{tab_exclusions}{An optional (default = NULL) list defining automated filters to remove non-representative biological records:
 \itemize{
-  \item{len_range - A numeric vector of length 2, e.g., c(10, 100). Any fish with a LENGTH 
+  \item len_range - A numeric vector of length 2, e.g., c(10, 100). Any fish with a LENGTH 
         strictly less than the first value or strictly greater than the second value 
-        will be added to the EXCLUSIONS tab.}
-  \item{age_range - A numeric vector of length 2, e.g., c(1, 20). Any fish with an AGE 
+        will be added to the EXCLUSIONS tab.
+  \item age_range - A numeric vector of length 2, e.g., c(1, 20). Any fish with an AGE 
         outside this range will be excluded. This is a powerful tool for removing 
-        extreme outliers that may be age-reading or data-entry errors.}
+        extreme outliers that may be age-reading or data-entry errors.
 }}
 
 \item{schema}{Set to "STOCKEFF_PRE_PROD" if using pre production data for assembly. Default is "STOCKEFF"}
@@ -141,17 +141,17 @@ fillCF(
        is provided, the user is responsible for closing it after the function executes.
         
 \itemize{
-\item{NOTE: tab_blocks$block_opt = checkLENGTHS will NOT work unless connected to the VPN}
-\item{NOTE: ALK_HOLES, and EXCLUSIONS tabs are optionally populated by this function and may need to be filled externally if tab_alk and tab_exclusions arguments are not used to fill gaps.}
-\item{NOTE: If you receive the following error, then the .xlsx file by the provided name already exists and can't be overwritten: [ERROR] workbook_close(): Error creating 'outfile.xlsx'. System error = Permission denied Error: Error in libxlsxwriter: 'Error creating output xlsx file. Usually a permissions error.'}
-\item{NOTE: If you find NAs in the REGION_ID for the BLOCKS tab, then there was a stat area in the {schema}.mv_cf_stock_data_length_o product that was not provided in the tab_regions$stat_areas argument. Will also result in REGION_ID = NA in ALKHOLES tab.}
+\item NOTE: tab_blocks$block_opt = checkLENGTHS will NOT work unless connected to the VPN
+\item NOTE: ALK_HOLES, and EXCLUSIONS tabs are optionally populated by this function and may need to be filled externally if tab_alk and tab_exclusions arguments are not used to fill gaps.
+\item NOTE: If you receive the following error, then the .xlsx file by the provided name already exists and can't be overwritten: [ERROR] workbook_close(): Error creating 'outfile.xlsx'. System error = Permission denied Error: Error in libxlsxwriter: 'Error creating output xlsx file. Usually a permissions error.'
+\item NOTE: If you find NAs in the REGION_ID for the BLOCKS tab, then there was a stat area in the \{schema\}.mv_cf_stock_data_length_o product that was not provided in the tab_regions$stat_areas argument. Will also result in REGION_ID = NA in ALKHOLES tab.
 }}
 }
 \value{
 A populated .xlsx template and a list containing the following:
 \itemize{
-  \item{mkt_missing_yr - A table of market categories years for which 1+ market categories were not sampled where 1+ market categories were not sampled}
-  \item{regions_missing - Table of AREAs that appear in oracle data but not in tab_regions$stat_area argument for this function (may be missing blocking)}
+  \item mkt_missing_yr - A table of market categories years for which 1+ market categories were not sampled where 1+ market categories were not sampled
+  \item regions_missing - Table of AREAs that appear in oracle data but not in tab_regions$stat_area argument for this function (may be missing blocking)
 }
 }
 \description{

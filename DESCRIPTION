@@ -7,6 +7,28 @@ Description: R package implementation of READ-PDB-COLLABORATIONS repository, mos
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Remotes: timjmiller/wham
-Imports: tidyverse, ROracle, dplyr, tidyr, ggplot2, quarto, DataExplorer, writexl, DBI, PlanBsmooth, wham, httr, keyring
+Imports:
+    DBI,
+    DataExplorer,
+    PlanBsmooth,
+    ROracle,
+    cli,
+    dplyr,
+    ggforce,
+    ggplot2,
+    glue,
+    here,
+    httr,
+    keyring,
+    magrittr,
+    purrr,
+    quarto,
+    readr,
+    rstudioapi,
+    stringr,
+    tibble,
+    tidyr,
+    wham,
+    writexl
 Config/roxygen2/version: 8.1.0
+Remotes: timjmiller/wham
